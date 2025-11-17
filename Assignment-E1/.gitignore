@@ -1,0 +1,6 @@
+*
+!*/
+!*.tex
+!*.ipynb
+!*.pdf
+!.gitignore
