@@ -26,7 +26,6 @@ Murphy chapter 10.2 intro and 10.2.3
 Module 6 - Variational Autoencoders:
 Kingma, Diederik P., and Max Welling. "Auto-encoding variational bayes." arXiv preprint arXiv:1312.6114 Links to an external site. (2013) Links to an external site..
 Murphy chapter 10.2.1, 21.1, 21.2.1, 21.2.2 and 21.2.3
-For Modules 7, 8 and 9, also check the lecture videos for suggested readings.
 
 Module 7:
 Chapters 1, 2 and 4 from Lee, John A., and Michel Verleysen. Nonlinear dimensionality reduction. Springer Science & Business Media, 2007. 
