@@ -1,0 +1,47 @@
+\documentclass[a4paper]{article}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{xcolor}
+
+\title{E1 - Assignment}
+\author{
+Bruno Carchia \\
+\texttt{@kth.se}
+\and
+Riccardo Alfonso Cerrone \\
+  \texttt{cerrone@kth.se}
+}
+
+\begin{document}
+\maketitle
+
+\begin{align*}
+\mathbb{P}(X_2 = x_2 \big | X_4 = \text{thin}) &= \dfrac{\mathbb{P}( X_4 = \text{thin} \big | X_2 = x_2) \mathbb{P}(X_2 = x_2)}{\mathbb{P}(X_4 = \text{thin})}
+\\
+& \propto \mathbb{P}( X_4 = \text{thin} \big | X_2 = x_2) \mathbb{P}(X_2 = x_2)
+\\ 
+&= \mathbb{P}( X_4 = \text{thin} \big | X_2 = x_2) \sum_{x_1}\mathbb{P}(X_2 = x_2, X_1=x_1)
+\\
+&= \mathbb{P}( X_4 = \text{thin} \big | X_2 = x_2) \sum_{x_1}\mathbb{P}(X_2 = x_2 \big| X_1=x_1)\mathbb{P}(X_1=x_1)
+\end{align*}
+
+\newpage
+
+\begin{align*}
+\mathbb{P}(X_1=x_1 \big | X_3 = \text{medium}, X_4 = \text{thin}) &= \dfrac{\mathbb{P}(X_1=x_1, X_3 = \text{medium}, X_4 = \text{thin})}{\mathbb{P}(X_3 = \text{medium})\mathbb{P}(X_4 = \text{thin} \big | X_3 = \text{medium})}
+\\
+& \propto \mathbb{P}(X_1=x_1, X_3 = \text{medium}, X_4 = \text{thin})
+\\
+&= \mathbb{P}(X_1 = x_1) \textcolor{red}{\mathbb{P}(X_3= \text{medium} \big | X_1 = x_1)} \\
+& \textcolor{blue}{\mathbb{P}(X_4 = \text{thin} \big | X_3 = \text{medium}, X_1 = x_1)}
+\end{align*}
+
+\begin{align*}
+\textcolor{blue}{\mathbb{P}(X_4 = \text{T} \big | X_3 = \text{M}, X_1 = x_1)} &= \sum_{x_2} \mathbb{P}(X_4= \text{T}, X_2 = x_2 \big |X_3 = \text{M}, X_1 = x_1) 
+\\
+&= \sum_{x_2} \mathbb{P}(X_4= \text{T}, X_2 = x_2 \big |X_3 = \text{M}, X_1 = x_1) 
+\end{align*}
+
+
+\end{document}
