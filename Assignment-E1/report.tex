@@ -68,4 +68,18 @@ Riccardo Alfonso Cerrone \\
 &= a_0 \log b_0 - \log \Gamma(a_0) + (a_0 -1) \E[\log \tau] - b_0 \E[\tau]
 \end{align*}
 
+\begin{align*}
+\E_q [\log \p (D | \mu, \tau)] &= \E_q \bigg[ \log \bigg(\prod_{n = 1}^{N} \p (x_n | \mu, \tau)\bigg)\bigg]  = \E_q \bigg[ \sum^N_{n = 1} \log \p (x_n | \mu, \tau)\bigg]
+\\
+&= \sum^N_{n = 1} \E_q \bigg[\log \p (x_n | \mu, \tau)\bigg] 
+= \sum^N_{n = 1} \E_q \bigg[\log \bigg(\sqrt{\dfrac{\tau}{2 \pi}} e^{-\frac{\tau}{2}(x_n - \mu)^2}\bigg)\bigg] 
+\\
+&= \sum^N_{n = 1} \E_q \bigg[ \dfrac{1}{2}\log \tau - \dfrac{1}{2} \log 2 \pi - \dfrac{\tau}{2}(x_n - \mu)^2
+\bigg] 
+\\
+&= \dfrac{N}{2} \log \E_q [\tau] - \dfrac{N}{2} \log 2 \pi - \frac{1}{2} \E_{q(\tau)}[\tau] \sum^N_{n = 1} \E_{q(\mu)}[x_n^2 + \mu^2 -2x_n \mu]
+\\
+&= \dfrac{N}{2} \log \E_q [\tau] - \dfrac{N}{2} \log 2 \pi - \frac{1}{2} \E_{q(\tau)}[\tau]\bigg(\sum^N_{n = 1} x_n^2-2\E_{q(\mu)}[\mu]\sum^N_{n = 1} +\E_{q(\mu)}[\mu^2]\bigg)
+\end{align*}
+
 \end{document}
