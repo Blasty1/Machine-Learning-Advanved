@@ -6,7 +6,8 @@
 
 \newcommand{\elbo}{\mathcal{L}}
 \newcommand{\E}{\mathbb{E}}
-\newcommand{\p}{\mathbb{P}}
+\newcommand{\p}{p}
+\newcommand{\q}{q}
 
 \title{E1 - Assignment}
 \author{
@@ -50,54 +51,80 @@ Riccardo Alfonso Cerrone \\
 \newpage
 
 \begin{align*}
-\elbo & = \E_q \bigg[ \dfrac{\log \p (x, \mu, \tau)}{\log q (\mu, \tau)} \bigg] \\
-&= \E_q [\log \p (x, \mu, \tau)] - \E_q [\log q (\mu, \tau)]\\
-&= \textcolor{red}{\E_q [\log \p (\mu | \lambda_0, \mu_0, \tau)]}
-+ \textcolor{blue}{\E_q [\log \p (\tau | a_0, b_0)]} 
-+ \textcolor{olive}{\E_q [\log \p (D | \mu, \tau)]}
-\\ &- \textcolor{orange}{\E_q [\log q (\mu)]} 
-- \textcolor{magenta}{\E_q [\log q (\tau)]}
+\elbo 
+&= \E_q \left[ \log \frac{\p(D, \mu, \tau)}{\q(\mu, \tau)} \right] \\
+&= \E_q [\log \p(D, \mu, \tau)] - \E_q [\log \q (\mu, \tau)]\\
+&= \textcolor{red}{\E_q [\log \p (\mu \mid \lambda_0, \mu_0, \tau)]}
++ \textcolor{blue}{\E_q [\log \p (\tau \mid a_0, b_0)]} 
++ \textcolor{olive}{\E_q [\log \p (D \mid \mu, \tau)]}
+\\ &\quad- \textcolor{orange}{\E_q [\log \q (\mu)]} 
+- \textcolor{magenta}{\E_q [\log \q (\tau)]}
 \end{align*}
 
 \begin{align*}
-\textcolor{red}{\E_q [\log \p (\mu | \lambda_0, \mu_0, \tau)]}
-&= \E \bigg[ \dfrac{1}{2} \log \tau + \dfrac{1}{2} \log \dfrac{\lambda_0}{2 \pi} - \dfrac{1}{2}\lambda_0 \tau (\mu - \mu_0)^2\bigg]
+\textcolor{red}{\E_q [\log \p (\mu \mid \lambda_0, \mu_0, \tau)]}
+&= \E_q \bigg[ \frac{1}{2} \log \tau 
++ \frac{1}{2} \log \frac{\lambda_0}{2 \pi} 
+- \frac{1}{2}\lambda_0 \tau (\mu - \mu_0)^2\bigg]
 \\
-&= \dfrac{1}{2} \log \dfrac{\lambda_0}{2 \pi} + \dfrac{1}{2} \E [\log \tau ] - \dfrac{1}{2}\lambda_0 \E [\tau]\bigg(\E[\mu^2]-2\mu_0\E[\mu]+\mu_0\bigg)
+&= \frac{1}{2} \log \frac{\lambda_0}{2 \pi} 
++ \frac{1}{2} \E_q [\log \tau ] 
+- \frac{1}{2}\lambda_0 \E_q [\tau]\Big(\E_q[\mu^2]-2\mu_0\E_q[\mu]+\mu_0^2\Big)
 \end{align*}
 
 \begin{align*}
-\textcolor{blue}{\E_q [\log \p (\tau | a_0, b_0)]} &= \E[a_0 \log b_0 - \log \Gamma(a_0) + (a_0 -1)\log \tau - b_0 \tau]\\
-&= a_0 \log b_0 - \log \Gamma(a_0) + (a_0 -1) \E[\log \tau] - b_0 \E[\tau]
+\textcolor{blue}{\E_q [\log \p (\tau \mid a_0, b_0)]} 
+&= \E_q\big[a_0 \log b_0 - \log \Gamma(a_0) + (a_0 -1)\log \tau - b_0 \tau\big]\\
+&= a_0 \log b_0 - \log \Gamma(a_0) 
++ (a_0 -1) \E_q[\log \tau] - b_0 \E_q[\tau]
 \end{align*}
 
 \begin{align*}
-\textcolor{olive}{\E_q [\log \p (D | \mu, \tau)]} &= \E_q \bigg[ \log \bigg(\prod_{n = 1}^{N} \p (x_n | \mu, \tau)\bigg)\bigg]  = \E_q \bigg[ \sum^N_{n = 1} \log \p (x_n | \mu, \tau)\bigg]
+\textcolor{olive}{\E_q [\log \p (D \mid \mu, \tau)]} 
+&= \E_q \bigg[ \log \bigg(\prod_{n = 1}^{N} \p (x_n \mid \mu, \tau)\bigg)\bigg]  
+= \E_q \bigg[ \sum_{n = 1}^{N} \log \p (x_n \mid \mu, \tau)\bigg]
 \\
-&= \sum^N_{n = 1} \E_q \bigg[\log \p (x_n | \mu, \tau)\bigg] 
-= \sum^N_{n = 1} \E_q \bigg[\log \bigg(\sqrt{\dfrac{\tau}{2 \pi}} e^{-\frac{\tau}{2}(x_n - \mu)^2}\bigg)\bigg] 
+&= \sum_{n = 1}^{N} \E_q \bigg[\log \p (x_n \mid \mu, \tau)\bigg] 
+= \sum_{n = 1}^{N} \E_q \bigg[\log \bigg(\sqrt{\frac{\tau}{2 \pi}} 
+\, e^{-\frac{\tau}{2}(x_n - \mu)^2}\bigg)\bigg] 
 \\
-&= \sum^N_{n = 1} \E_q \bigg[ \dfrac{1}{2}\log \tau - \dfrac{1}{2} \log 2 \pi - \dfrac{\tau}{2}(x_n - \mu)^2
-\bigg] 
+&= \sum_{n = 1}^{N} \E_q \bigg[ \frac{1}{2}\log \tau 
+- \frac{1}{2} \log (2 \pi) 
+- \frac{\tau}{2}(x_n - \mu)^2 \bigg] 
 \\
-&= \dfrac{N}{2} \log \E_q [\tau] - \dfrac{N}{2} \log 2 \pi - \frac{1}{2} \E_{q(\tau)}[\tau] \sum^N_{n = 1} \E_{q(\mu)}[x_n^2 + \mu^2 -2x_n \mu]
+&= \frac{N}{2} \E_q [\log \tau] - \frac{N}{2} \log (2 \pi)
+- \frac{1}{2} \E_q[\tau] 
+\sum_{n = 1}^{N} \E_q\big[(x_n - \mu)^2\big]
 \\
-&= \dfrac{N}{2} \log \E_q [\tau] - \dfrac{N}{2} \log 2 \pi - \frac{1}{2} \E_{q(\tau)}[\tau]\bigg(\sum^N_{n = 1} x_n^2-2\E_{q(\mu)}[\mu]\sum^N_{n = 1} x_n+\E_{q(\mu)}[\mu^2]\bigg)
+&= \frac{N}{2} \E_q [\log \tau] - \frac{N}{2} \log (2 \pi)
+- \frac{1}{2} \E_q[\tau] 
+\bigg(\sum_{n = 1}^{N} x_n^2 
+- 2 \E_q[\mu]\sum_{n = 1}^{N} x_n 
++ N \E_q[\mu^2]\bigg)
 \end{align*}
 
 \begin{align*}
-\textcolor{orange}{\E_q [\log q (\mu)]} &= \E_q \bigg[\log \bigg(\sqrt{\dfrac{\lambda_N}{2 \pi}} e^{-\frac{\lambda_N}{2}(\mu - \mu_N)^2}\bigg)\bigg] 
+\textcolor{orange}{\E_q [\log \q (\mu)]} 
+&= \E_q \bigg[\log \bigg(\sqrt{\frac{\lambda_N}{2 \pi}} 
+\, e^{-\frac{\lambda_N}{2}(\mu - \mu_N)^2}\bigg)\bigg] 
 \\
-&= \E_q \bigg[ \dfrac{1}{2}\log \dfrac{\lambda_N}{2 \pi} - \dfrac{\lambda_N}{2}(\mu - \mu_N)^2 \bigg] = \dfrac{1}{2}\log \dfrac{\lambda_N}{2 \pi} - \dfrac{\lambda_N}{2} \E_q \bigg[(\mu - \mu_N)^2\bigg]
+&= \E_q \bigg[ \frac{1}{2}\log \frac{\lambda_N}{2 \pi} 
+- \frac{\lambda_N}{2}(\mu - \mu_N)^2 \bigg] 
 \\
-&= \dfrac{1}{2}\log \dfrac{\lambda_N}{2 \pi} - \dfrac{\lambda_N}{2} \dfrac{1}{\lambda_N}
+&= \frac{1}{2}\log \frac{\lambda_N}{2 \pi} 
+- \frac{\lambda_N}{2} \E_q \big[(\mu - \mu_N)^2\big]
 \\
-&= \dfrac{1}{2}\bigg(\log \dfrac{\lambda_N}{2 \pi} - 1\bigg)
+&= \frac{1}{2}\log \frac{\lambda_N}{2 \pi} 
+- \frac{\lambda_N}{2} \cdot \frac{1}{\lambda_N}
+\\
+&= \frac{1}{2}\bigg(\log \frac{\lambda_N}{2 \pi} - 1\bigg)
 \end{align*}
 
 \begin{align*}
-\textcolor{magenta}{\E_q [\log q (\tau)]} &= \E[a_N \log b_N - \log \Gamma(a_N) + (a_N -1)\log \tau - b_N \tau]\\
-&= a_N \log b_N - \log \Gamma(a_N) + (a_N -1) \E[\log \tau] - b_N \E[\tau]
+\textcolor{magenta}{\E_q [\log \q (\tau)]} 
+&= \E_q\big[a_N \log b_N - \log \Gamma(a_N) + (a_N -1)\log \tau - b_N \tau\big]\\
+&= a_N \log b_N - \log \Gamma(a_N) 
++ (a_N -1) \E_q[\log \tau] - b_N \E_q[\tau]
 \end{align*}
 
 \end{document}
