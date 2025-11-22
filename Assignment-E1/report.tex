@@ -1,4 +1,4 @@
-\documentclass[a4paper]{article}
+\documentclass[a4paper]{scrartcl}
 
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -20,6 +20,18 @@ Riccardo Alfonso Cerrone \\
 
 \begin{document}
 \maketitle
+
+\section*{1.1 \quad Dependencies in a Directed Graphical Model}
+\begin{enumerate}
+  \item Yes.
+  \item No.
+  \item No.
+  \item No.
+  \item Yes.
+  \item No.
+\end{enumerate}
+
+\newpage
 
 \begin{align*}
 \mathbb{P}(X_2 = x_2 \big | X_4 = \text{thin}) &= \dfrac{\mathbb{P}( X_4 = \text{thin} \big | X_2 = x_2) \mathbb{P}(X_2 = x_2)}{\mathbb{P}(X_4 = \text{thin})}
@@ -50,11 +62,11 @@ Riccardo Alfonso Cerrone \\
 
 \newpage
 
-\section{CAVI}
-\subsection{Question 1.3.12}
-\subsubsection{Introduction}
+\section*{1.3 \quad CAVI}
+\subsubsection*{Introduction}
 
-\subsubsection{Derivation of CAVI updates}
+\subsection*{1.3.12}
+\subsubsection*{Derivation of CAVI updates}
 
 \begin{equation}
   \q(\mu) \sim \mathcal{N} (\mu_N, \lambda_N)
@@ -90,7 +102,7 @@ Riccardo Alfonso Cerrone \\
   \label{eq:b_N}
 \end{equation}
 
-\subsubsection{Derivation of the ELBO}
+\subsubsection*{Derivation of the ELBO}
 
 We now derive the Evidence Lower Bound by expanding each term in
 \(\E_q[\log p(D,\mu,\tau)]\) and \(\E_q[\log q(\mu,\tau)]\).
