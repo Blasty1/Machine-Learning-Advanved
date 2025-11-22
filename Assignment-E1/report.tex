@@ -11,7 +11,7 @@
 \title{E1 - Assignment}
 \author{
 Bruno Carchia \\
-\texttt{@kth.se}
+\texttt{carchia@kth.se}
 \and
 Riccardo Alfonso Cerrone \\
   \texttt{cerrone@kth.se}
@@ -82,17 +82,22 @@ Riccardo Alfonso Cerrone \\
 \\
 &= \dfrac{N}{2} \log \E_q [\tau] - \dfrac{N}{2} \log 2 \pi - \frac{1}{2} \E_{q(\tau)}[\tau] \sum^N_{n = 1} \E_{q(\mu)}[x_n^2 + \mu^2 -2x_n \mu]
 \\
-&= \dfrac{N}{2} \log \E_q [\tau] - \dfrac{N}{2} \log 2 \pi - \frac{1}{2} \E_{q(\tau)}[\tau]\bigg(\sum^N_{n = 1} x_n^2-2\E_{q(\mu)}[\mu]\sum^N_{n = 1} +\E_{q(\mu)}[\mu^2]\bigg)
+&= \dfrac{N}{2} \log \E_q [\tau] - \dfrac{N}{2} \log 2 \pi - \frac{1}{2} \E_{q(\tau)}[\tau]\bigg(\sum^N_{n = 1} x_n^2-2\E_{q(\mu)}[\mu]\sum^N_{n = 1} x_n+\E_{q(\mu)}[\mu^2]\bigg)
 \end{align*}
 
 \begin{align*}
 \textcolor{orange}{\E_q [\log q (\mu)]} &= \E_q \bigg[\log \bigg(\sqrt{\dfrac{\lambda_N}{2 \pi}} e^{-\frac{\lambda_N}{2}(\mu - \mu_N)^2}\bigg)\bigg] 
 \\
-&= \E_q \bigg[ \dfrac{1}{2}\log \dfrac{\lambda_N}{2 \pi} - \dfrac{\lambda_N}{2}(\mu - \mu_N)^2 \bigg] = \dfrac{1}{2}\log \dfrac{\lambda_N}{2 \pi} - \dfrac{\lambda_N}{2} \E_q \bigg[(\mu - \mu_N)^2
+&= \E_q \bigg[ \dfrac{1}{2}\log \dfrac{\lambda_N}{2 \pi} - \dfrac{\lambda_N}{2}(\mu - \mu_N)^2 \bigg] = \dfrac{1}{2}\log \dfrac{\lambda_N}{2 \pi} - \dfrac{\lambda_N}{2} \E_q \bigg[(\mu - \mu_N)^2\bigg]
 \\
 &= \dfrac{1}{2}\log \dfrac{\lambda_N}{2 \pi} - \dfrac{\lambda_N}{2} \dfrac{1}{\lambda_N}
 \\
 &= \dfrac{1}{2}\bigg(\log \dfrac{\lambda_N}{2 \pi} - 1\bigg)
+\end{align*}
+
+\begin{align*}
+\textcolor{magenta}{\E_q [\log q (\tau)]} &= \E[a_N \log b_N - \log \Gamma(a_N) + (a_N -1)\log \tau - b_N \tau]\\
+&= a_N \log b_N - \log \Gamma(a_N) + (a_N -1) \E[\log \tau] - b_N \E[\tau]
 \end{align*}
 
 \end{document}
