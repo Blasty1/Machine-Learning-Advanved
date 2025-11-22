@@ -4,14 +4,10 @@
 \usepackage{amsfonts}
 \usepackage{xcolor}
 
-\newcommand{\elbo}{\mathcal{L}}
-\newcommand{\E}{\mathbb{E}}
-\newcommand{\p}{\mathbb{P}}
-
 \title{E1 - Assignment}
 \author{
 Bruno Carchia \\
-\texttt{@kth.se}
+\texttt{carchia@kth.se}
 \and
 Riccardo Alfonso Cerrone \\
   \texttt{cerrone@kth.se}
@@ -20,16 +16,45 @@ Riccardo Alfonso Cerrone \\
 \begin{document}
 \maketitle
 
-\begin{align*}
-\mathbb{P}(X_2 = x_2 \big | X_4 = \text{thin}) &= \dfrac{\mathbb{P}( X_4 = \text{thin} \big | X_2 = x_2) \mathbb{P}(X_2 = x_2)}{\mathbb{P}(X_4 = \text{thin})}
-\\
-& \propto \mathbb{P}( X_4 = \text{thin} \big | X_2 = x_2) \mathbb{P}(X_2 = x_2)
-\\ 
-&= \mathbb{P}( X_4 = \text{thin} \big | X_2 = x_2) \sum_{x_1}\mathbb{P}(X_2 = x_2, X_1=x_1)
-\\
-&= \mathbb{P}( X_4 = \text{thin} \big | X_2 = x_2) \sum_{x_1}\mathbb{P}(X_2 = x_2 \big| X_1=x_1)\mathbb{P}(X_1=x_1)
-\end{align*}
+\section*{1.2 Inference in Bayesian Networks}
+\subsection*{1.2.7 Classify the fish as salmon or sea bass}
+Suppose the fish was caught on December 20, with
+\[
+\mathbb{P}(X_1) = (0.5, 0, 0, 0.5)
+\]
+corresponding to the four seasons (winter, spring, summer, autumn). 
+The lightness has not been measured, but it is known that the fish is thin.
 
+We want to compute the posterior distributions
+\[
+\mathbb{P}(X_2 \mid X_4 = \text{thin})
+\]
+in order to classify the fish as salmon or sea bass.
+
+Using the Bayes rule, we have
+\[
+\mathbb{P}(X_2 \mid X_4 = \text{thin})= \dfrac{\mathbb{P}( X_4 = \text{thin} \mid X_2) \mathbb{P}(X_2)}{\mathbb{P}(X_4 = \text{thin})}
+\]
+Where:
+\begin{itemize}
+    \item \begin{math}\mathbb{P}( X_4 = \text{thin} \mid X_2)\end{math} is given by the corresponding CPT
+    \item \begin{math}\mathbb{P}(X_2)\end{math} = \(\sum_{x_1}\mathbb{P}(X_2, X_1=x_1)\) = \(\sum_{x_1}\mathbb{P}(X_2 \mid X_1=x_1)\mathbb{P}(X_1=x_1)\) can be computed using the given CPT and the prior on \begin{math}X_1\end{math}
+    \item \begin{math}\mathbb{P}(X_4 = \text{thin})\end{math} is a normalizing constant and for this reason we can ignore it in the computation.
+\end{itemize}
+At the end, we have:
+\[
+  \mathbb{P}(X_2 | X_4 = \text{thin}) \propto \mathbb{P}(X_4=\text{thin} | X_2) \sum_{x_1}\mathbb{P}(X_2 \mid X_1=x_1)\mathbb{P}(X_1=x_1)
+\]
+The second step is to compute the above expression for both values of \begin{math}X_2\end{math} (salmon and sea bass) and then compare the results to classify the fish.
+
+\begin{align*} \mathbb{P}(X_2 = \text{salmon} \mid X_4 = \text{thin}) & \propto 0.65 * (0.5*0.88 + 0*0.32 + 0*0.42 + 0.5*0.78) \\ & \propto 0.65 * (0.44 + 0 + 0 + 0.39) \\ & \propto 0.65 * 0.83 \\ & \propto 0.5395 \end{align*}
+
+\begin{align*} \mathbb{P}(X_2 = \text{sea bass} \mid X_4 = \text{thin}) & \propto 0.06 * (0.5*0.12 + 0*0.68 + 0*0.58 + 0.5*0.22) \\ & \propto 0.06 * (0.06 + 0 + 0 + 0.11) \\ & \propto 0.65 * 0.17 \\ & \propto 0.0102 \end{align*}
+
+For the classification we compare the two results:
+\[ 0.5395 > 0.0102
+\]
+so we classify the fish as \textbf{salmon}.
 \newpage
 
 \begin{align*}
@@ -47,25 +72,5 @@ Riccardo Alfonso Cerrone \\
 &= \sum_{x_2} \mathbb{P}(X_4= \text{T}, X_2 = x_2 \big |X_3 = \text{M}, X_1 = x_1) 
 \end{align*}
 
-\newpage
-
-\begin{align*}
-\elbo & = \E_q \bigg[ \dfrac{\log \p (x, \mu, \tau)}{\log q (\mu, \tau)} \bigg] \\
-&= \E_q [\log \p (x, \mu, \tau)] - \E_q [\log q (\mu, \tau)]\\
-&= \E_q [\log \p (\mu | \lambda_0, \mu_0, \tau)] + \E_q [\log \p (\tau | a_0, b_0)] + \E_q [\log \p (D | \mu, \tau)] 
-\\ &- \E_q [\log q (\mu)] - \E_q [\log q (\tau)]
-\end{align*}
-
-\begin{align*}
-\E_q [\log \p (\mu | \lambda_0, \mu_0, \tau)] 
-&= \E \bigg[ \dfrac{1}{2} \log \tau + \dfrac{1}{2} \log \dfrac{\lambda_0}{2 \pi} - \dfrac{1}{2}\lambda_0 \tau (\mu - \mu_0)^2\bigg]
-\\
-&= \dfrac{1}{2} \log \dfrac{\lambda_0}{2 \pi} + \dfrac{1}{2} \E [\log \tau ] - \dfrac{1}{2}\lambda_0 \E [\tau]\bigg(\E[\mu^2]-2\mu_0\E[\mu]+\mu_0\bigg)
-\end{align*}
-
-\begin{align*}
-\E[\log \p(\tau | a_0, b_0)] &= \E[a_0 \log b_0 - \log \Gamma(a_0) + (a_0 -1)\log \tau - b_0 \tau]\\
-&= a_0 \log b_0 - \log \Gamma(a_0) + (a_0 -1) \E[\log \tau] - b_0 \E[\tau]
-\end{align*}
 
 \end{document}
