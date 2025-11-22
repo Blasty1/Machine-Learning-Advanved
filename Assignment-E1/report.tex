@@ -4,6 +4,10 @@
 \usepackage{amsfonts}
 \usepackage{xcolor}
 
+\newcommand{\elbo}{\mathcal{L}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\p}{\mathbb{P}}
+
 \title{E1 - Assignment}
 \author{
 Bruno Carchia \\
@@ -43,5 +47,25 @@ Riccardo Alfonso Cerrone \\
 &= \sum_{x_2} \mathbb{P}(X_4= \text{T}, X_2 = x_2 \big |X_3 = \text{M}, X_1 = x_1) 
 \end{align*}
 
+\newpage
+
+\begin{align*}
+\elbo & = \E_q \bigg[ \dfrac{\log \p (x, \mu, \tau)}{\log q (\mu, \tau)} \bigg] \\
+&= \E_q [\log \p (x, \mu, \tau)] - \E_q [\log q (\mu, \tau)]\\
+&= \E_q [\log \p (\mu | \lambda_0, \mu_0, \tau)] + \E_q [\log \p (\tau | a_0, b_0)] + \E_q [\log \p (D | \mu, \tau)] 
+\\ &- \E_q [\log q (\mu)] - \E_q [\log q (\tau)]
+\end{align*}
+
+\begin{align*}
+\E_q [\log \p (\mu | \lambda_0, \mu_0, \tau)] 
+&= \E \bigg[ \dfrac{1}{2} \log \tau + \dfrac{1}{2} \log \dfrac{\lambda_0}{2 \pi} - \dfrac{1}{2}\lambda_0 \tau (\mu - \mu_0)^2\bigg]
+\\
+&= \dfrac{1}{2} \log \dfrac{\lambda_0}{2 \pi} + \dfrac{1}{2} \E [\log \tau ] - \dfrac{1}{2}\lambda_0 \E [\tau]\bigg(\E[\mu^2]-2\mu_0\E[\mu]+\mu_0\bigg)
+\end{align*}
+
+\begin{align*}
+\E[\log \p(\tau | a_0, b_0)] &= \E[a_0 \log b_0 - \log \Gamma(a_0) + (a_0 -1)\log \tau - b_0 \tau]\\
+&= a_0 \log b_0 - \log \Gamma(a_0) + (a_0 -1) \E[\log \tau] - b_0 \E[\tau]
+\end{align*}
 
 \end{document}
