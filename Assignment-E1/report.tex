@@ -37,7 +37,9 @@ Riccardo Alfonso Cerrone \\
 
 
 % Exercise 2
+
 \section*{1.2 \quad Inference in Bayesian Networks}
+
 \subsection*{1.2.7 \quad Fish Classification}
 Suppose the fish was caught on December 20, with
 \[
@@ -128,7 +130,7 @@ Now we can compute each term:
    \mathbb{P}(X_4 = \text{t},\, X_2 = x_2 \mid X_3 = \text{m}, X_1 = x_1)
 \\
 &= \sum_{x_2} 
-   \mathbb{P}(X_4 = \text{t} \mid X_2 = x_2,\, X_3 = \text{m},\, X_1 = x_1)\,
+   \mathbb{P}(X_4 = \text{t} \mid X_2 = x_2,\, \textcolor{gray}{X_3 = \text{m},\, X_1 = x_1})\,
    \mathbb{P}(X_2 = x_2 \mid X_3 = \text{m}, X_1 = x_1)
 \\
 &= \sum_{x_2}
@@ -176,7 +178,6 @@ At this point we can compute the above expression for each value of \(X_1\) (the
 
 Comparing the results we have that the most likely season is \textbf{winter}.
 
-
 \section*{1.3 \quad CAVI}
 
 \subsection*{1.3.11 \quad Exact posterior derivation}
@@ -192,7 +193,7 @@ Using the Bayes rule we can write the posterior as:
 \]
 where:
 \begin{itemize}
-    \item \begin{math}P(\theta) = P(\mu, \tau)\end{math} is the prior distribution
+    \item \begin{math}\p(\theta) = \p(\mu, \tau)\end{math} is the prior distribution
 
 Knowing that:
 \[
@@ -219,7 +220,7 @@ e^{\!
 \]
 We can now write the log-posterior ignoring the terms that are constants with respect to \(\mu\) and \(\tau\)
 \[
-\log P(\mu,\tau \mid X)
+\log \p(\mu,\tau \mid X)
 = \log \left(\prod_{n=1}^N P(x_n | \mu, \tau) P(\mu, \tau)\right)
 = \sum_{n=1}^N \log P(x_n | \mu, \tau) + \log P(\mu, \tau)
 \]
@@ -293,11 +294,11 @@ And in order to complete the square we can add and subtract \(\textcolor{gray}{\
 \]
 We can rewrite it as:
 \[
-\log P(\mu,\tau \mid X) \propto \left(\alpha_0^* - \dfrac{1}{2}\right) \log \tau - \beta_0^* \tau - \frac{\tau \lambda_0^*}{2}(\mu - \mu_0^*)^2
+\log \p(\mu,\tau \mid X) \propto \left(\alpha_0^* - \dfrac{1}{2}\right) \log \tau - \beta_0^* \tau - \frac{\tau \lambda_0^*}{2}(\mu - \mu_0^*)^2
 \]
 We recognize the kernel of a Normal-Gamma distribution, so the posterior is distributed as:
 \[
-P(\mu,\tau \mid X)
+\p(\mu,\tau \mid X)
 \sim
 \mathcal{N}\Gamma\!\left(
 \mu_0^*,\,
@@ -337,38 +338,51 @@ with updated parameters:
 
 \subsubsection*{Derivation of CAVI updates}
 
+Below we recall the standard CAVI procedure: for each latent variable, we isolate all
+terms in the joint density that depend on it, take the expectation with respect to the
+other variational factor, and recognise the resulting expression as a known member of
+the exponential family. This yields closed-form updates for both $q(\tau)$ and $q(\mu)$ in
+the Normal–Gamma model.
+
+\paragraph{Update for $q^*(\tau)$.}
+To compute $q^*(\tau)$, we collect all terms in $\log \p(\tau,X\mid\mu)$ that depend on $\tau$ and
+take the expectation with respect to $q(\mu)$. The resulting expression contains only a
+log-term in $\tau$ and a linear term in $\tau$, which matches the canonical form of a
+Gamma distribution. This directly identifies the updated shape and rate parameters,
+leading to the expression below.
+
 \begin{align*}
 \log q^*(\tau) 
-&= \E_{q(\mu)} \big[ \log p(\tau, X \mid \mu) \big] \\[6pt]
-&= \E_{q(\mu)} \Big[
-(a_0 - \tfrac{1}{2}) \log \tau 
+&= \E_{q(\mu)} \left[ \log p(\tau, X \mid \mu) \right] \\[6pt]
+&= \E_{q(\mu)} \left[
+\left(a_0 - \dfrac{1}{2}\right) \log \tau 
 - \beta_0 \tau 
 - \frac{\lambda_0}{2} (\mu - \mu_0)^2
 + \frac{N}{2} \log \tau 
 - \frac{\tau}{2} \sum_{i=1}^N (x_i - \mu)^2
-\Big] \\[6pt]
-&= \big( a_0 - \tfrac{1}{2} + \tfrac{N}{2} \big) \log \tau
-\;-\; \tau \Big(
+\right] \\
+&= \big( a_0 - \frac{1}{2} + \frac{N}{2} \big) \log \tau
+\;-\; \tau \left(
 \beta_0 
 + \frac{\lambda_0}{2} \E_{q(\mu)}[(\mu - \mu_0)^2]
-+ \frac{1}{2} \E_{q(\mu)} \Big[ \sum_{i=1}^N (x_i - \mu)^2 \Big]
-\Big) \\[6pt]
-&= \log \tau \;\big( a_0 + \tfrac{N}{2} - \tfrac{1}{2}\big)
-- \tau \Big( 
++ \frac{1}{2} \E_{q(\mu)} \left[ \sum_{i=1}^N (x_i - \mu)^2 \right]
+\right) \\
+&= \log \tau \;\big( a_0 + \frac{N}{2} - \frac{1}{2}\big)
+- \tau \left( 
 \beta_0 + \frac{\lambda_0}{2} \E_{q(\mu)}[(\mu-\mu_0)^2]
-+ \frac{1}{2} \E_{q(\mu)} \sum_{i=1}^N (x_i - \mu)^2
-\Big)
++ \frac{1}{2} \E_{q(\mu)} \left[ \sum_{i=1}^N (x_i - \mu)^2\right]
+\right)
 \end{align*}
 
 \[
 q^*(\tau) \propto 
 \tau^{\,a_0 + \frac{N}{2} - \frac{1}{2} - 1}\;
 \exp\!\left(
--\tau \Big[
+-\tau \left[
 \beta_0
-+ \frac{\lambda_0}{2}\E_{q(\mu)}[(\mu-\mu_0)^2]
-+ \frac{1}{2}\E_{q(\mu)} \sum_{i=1}^N (x_i - \mu)^2
-\Big]
++ \frac{\lambda_0}{2}\E_{q(\mu)}\left[(\mu-\mu_0)^2\right]
++ \frac{1}{2}\E_{q(\mu)} \left[ \sum_{i=1}^N (x_i - \mu)^2\right]
+\right]
 \right)
 \]
 
@@ -376,6 +390,8 @@ q^*(\tau) \propto
   \q(\tau) \sim \text{Gam} (\alpha_N, \beta_N)
   \label{eq:q_tau}
 \end{equation}
+
+where
 
 \begin{equation}
   \alpha_N = \alpha_0 + \dfrac{N+1}{2}
@@ -389,13 +405,20 @@ q^*(\tau) \propto
   \label{eq:b_N}
 \end{equation}
 
+\paragraph{Update for $q^*(\mu)$.}
+For the update of $q(\mu)$, we extract all terms in $\log p(\mu,X\mid\tau)$ that are
+functions of $\mu$ and take the expectation with respect to $q(\tau)$. The dependence on
+$\mu$ is entirely quadratic, so the optimal factor must be Gaussian. Identifying the
+quadratic coefficient and the linear term immediately yields the updated posterior mean
+and precision.
+
 \begin{align*}
 \log q^*(\mu)
-&= \E_{q(\tau)} \big[ \log p(\mu, X \mid \tau) \big] \\[4pt]
+&= \E_{q(\tau)} \big[ \log p(\mu, X \mid \tau) \big] \\
 &= \E_{q(\tau)} \Big[
 -\frac{\lambda_0\tau}{2} (\mu - \mu_0)^2
 - \frac{\tau}{2} \sum_{i=1}^N (x_i - \mu)^2
-\Big] \\[6pt]
+\Big] \\
 &= - \frac{\E_{q(\tau)}[\tau]}{2}
 \Big[ 
 \lambda_0 (\mu - \mu_0)^2
@@ -403,11 +426,12 @@ q^*(\tau) \propto
 \Big].
 \end{align*}
 
-
 \begin{equation}
   \q(\mu) \sim \mathcal{N} (\mu_N, \lambda_N)
   \label{eq:q_mu}
 \end{equation}
+
+where
 
 \begin{equation}
   \mu_N = \dfrac{\lambda_0 \mu_0 + \sum x_n}{\lambda_0 + N}
@@ -548,6 +572,7 @@ variational parameters
 \(\mu_N\), \(\lambda_N\), \(\alpha_N\), \(\beta_N\),  
 which correspond directly to the CAVI updates given in 
 \eqref{eq:q_mu}-\eqref{eq:b_N}, and \(\mu_0\), \(\lambda_0\), \(\alpha_0\), \(b_0\).
+
 
 \subsubsection*{Conclusions}
 The Coordinate Ascent Variational Inference (CAVI) algorithm was successfully implemented for the Normal-Gamma conjugate model and evaluated on the second datasets of varying sizes (n=100). The results demonstrate several key findings:
