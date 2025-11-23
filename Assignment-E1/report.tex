@@ -3,6 +3,7 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{xcolor}
+\usepackage{graphicx}
 
 \newcommand{\elbo}{\mathcal{L}}
 \newcommand{\E}{\mathbb{E}}
@@ -549,5 +550,42 @@ which correspond directly to the CAVI updates given in
 \eqref{eq:q_mu}-\eqref{eq:b_N}, and \(\mu_0\), \(\lambda_0\), \(\alpha_0\), \(b_0\).
 
 \subsubsection*{Conclusions}
+The Coordinate Ascent Variational Inference (CAVI) algorithm was successfully implemented for the Normal-Gamma conjugate model and evaluated on the second datasets of varying sizes (n=100). The results demonstrate several key findings:
+\begin{itemize}
+ 
+\item Convergence Behavior: The ELBO plot ( figure 1 ) shows rapid convergence within approximately 5-6 iterations, starting from an initial value of around -0.071 and stabilizing at approximately -0.179. The steep increase in the first iteration followed by marginal improvements indicates that the algorithm efficiently identifies the optimal variational parameters. This fast convergence is characteristic of conjugate variational inference, where coordinate updates have closed-form solutions.
 
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.7\linewidth]{imgs/ELBO.png}
+    \caption{ELBO convergence over CAVI iterations for n=100 dataset.}
+    \label{fig:my_image}
+\end{figure}
+
+\item Accuracy of Approximation: The contour plots reveal that the CAVI approximate posterior (green dashed contours) closely matches the exact posterior distribution (blue solid contours)( figure 3) for both the mean parameter \(\mu\) and precision parameter \(\tau\). The numerical comparison confirms this:
+\begin{center}
+Mean (\(\mu\)): Exact = 1.1122, CAVI = 1.1122, \(\Delta\mu \approx\) 0.000008\\
+Precision ( \(\tau\) ): Exact = 0.5339, CAVI = 0.5391, \(\Delta\tau \approx \) 0.005
+\end{center}
+The approximation is nearly perfect for the mean parameter, while showing a small discrepancy in the precision parameter. This slight difference in \(\tau\) is expected because the mean-field assumption in variational inference (factorizing \(q(\mu,\tau) = q(\mu)q(\tau)\)) introduces some approximation error, particularly in capturing the correlation structure between parameters.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1\linewidth]{imgs/Comparison.png}
+    \caption{Showing exact posterior (blue solid) and CAVI approximation (green dashed) contours individually for n=100 dataset.}
+    \label{fig:my_image}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.7\linewidth]{imgs/ExactPosteriorVSCAVI.png}
+    \caption{Contour plots comparing exact posterior (blue solid) and CAVI approximation (green dashed) for n=100 dataset. Red stars indicate ML estimates.}
+    \label{fig:my_image}
+\end{figure}
+
+
+\item Comparison with ML Estimate: The maximum likelihood estimates (\(\mu_{ML}\) = 1.1123, \(\tau_{ML}\) = 0.5347) are marked with red stars on the contour plots and lie very close to both the exact and approximate posterior modes. This alignment is expected for large sample sizes, where the posterior becomes increasingly concentrated around the ML estimate. However, the Bayesian approaches (both exact and CAVI) provide full distributional information rather than point estimates, quantifying uncertainty through the posterior distribution's spread.
+\item Overall Assessment: The CAVI algorithm provides an excellent approximation to the exact posterior for this conjugate Normal-Gamma model. The mean-field factorization assumption introduces minimal error, particularly for the location parameter \(\mu\). The rapid convergence and high accuracy make CAVI a computationally efficient alternative to exact posterior computation, especially valuable for models where exact inference becomes intractable. For the dataset analyzed (n=100), all three approaches (exact posterior, CAVI, and ML) yield consistent parameter estimates, validating both the implementation and the effectiveness of variational inference for this problem.
+
+\end{itemize}
 \end{document}
