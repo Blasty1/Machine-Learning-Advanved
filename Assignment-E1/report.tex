@@ -1,10 +1,16 @@
-\documentclass[a4paper]{article}
+\documentclass[a4paper]{scrartcl}
 
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{xcolor}
 
-\title{E1 - Assignment}
+\newcommand{\elbo}{\mathcal{L}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\p}{\mathbb{P}}
+\newcommand{\q}{q}
+
+\title{Assignment 1E, 2025}
+\subtitle{DD2434 Machine Learning, Advanced Course}
 \author{
 Bruno Carchia \\
 \texttt{carchia@kth.se}
@@ -16,8 +22,22 @@ Riccardo Alfonso Cerrone \\
 \begin{document}
 \maketitle
 
-\section*{1.2 Inference in Bayesian Networks}
-\subsection*{1.2.7 Classify the fish as salmon or sea bass}
+\begin{description}
+    \item[Group \#] 60 
+\end{description}
+% Exercise 1
+\section*{1.1 \quad Dependencies in a Directed Graphical Model}
+\paragraph{1.1.1}{Yes.}
+\paragraph{1.1.2}{No.}
+\paragraph{1.1.3}{No.}
+\paragraph{1.1.4}{No.}
+\paragraph{1.1.5}{Yes.}
+\paragraph{1.1.6}{No.}
+
+
+% Exercise 2
+\section*{1.2 \quad Inference in Bayesian Networks}
+\subsection*{1.2.7 \quad Fish Classification}
 Suppose the fish was caught on December 20, with
 \[
 \mathbb{P}(X_1) = (0.5, 0, 0, 0.5)
@@ -33,44 +53,501 @@ in order to classify the fish as salmon or sea bass.
 
 Using the Bayes rule, we have
 \[
-\mathbb{P}(X_2 \mid X_4 = \text{thin})= \dfrac{\mathbb{P}( X_4 = \text{thin} \mid X_2) \mathbb{P}(X_2)}{\mathbb{P}(X_4 = \text{thin})}
+\mathbb{P}(X_2 \mid X_4 = \text{thin})= \dfrac{\mathbb{P}( X_4 = \text{thin} \mid X_2) \cdot \mathbb{P}(X_2)}{\mathbb{P}(X_4 = \text{thin})}
 \]
 Where:
 \begin{itemize}
     \item \begin{math}\mathbb{P}( X_4 = \text{thin} \mid X_2)\end{math} is given by the corresponding CPT
-    \item \begin{math}\mathbb{P}(X_2)\end{math} = \(\sum_{x_1}\mathbb{P}(X_2, X_1=x_1)\) = \(\sum_{x_1}\mathbb{P}(X_2 \mid X_1=x_1)\mathbb{P}(X_1=x_1)\) can be computed using the given CPT and the prior on \begin{math}X_1\end{math}
+    \item \begin{math}\mathbb{P}(X_2)\end{math} = \(\sum_{x_1}\mathbb{P}(X_2, X_1=x_1)\) = \(\sum_{x_1}\mathbb{P}(X_2 \mid X_1=x_1)\cdot \mathbb{P}(X_1=x_1)\) can be computed using the given CPT and the prior on \begin{math}X_1\end{math}
     \item \begin{math}\mathbb{P}(X_4 = \text{thin})\end{math} is a normalizing constant and for this reason we can ignore it in the computation.
 \end{itemize}
 At the end, we have:
 \[
-  \mathbb{P}(X_2 | X_4 = \text{thin}) \propto \mathbb{P}(X_4=\text{thin} | X_2) \sum_{x_1}\mathbb{P}(X_2 \mid X_1=x_1)\mathbb{P}(X_1=x_1)
+  \mathbb{P}(X_2 \mid X_4 = \text{thin}) \propto \mathbb{P}(X_4=\text{thin} \mid X_2) \cdot \sum_{x_1}\mathbb{P}(X_2 \mid X_1=x_1)\cdot \mathbb{P}(X_1=x_1)
 \]
 The second step is to compute the above expression for both values of \begin{math}X_2\end{math} (salmon and sea bass) and then compare the results to classify the fish.
 
-\begin{align*} \mathbb{P}(X_2 = \text{salmon} \mid X_4 = \text{thin}) & \propto 0.65 * (0.5*0.88 + 0*0.32 + 0*0.42 + 0.5*0.78) \\ & \propto 0.65 * (0.44 + 0 + 0 + 0.39) \\ & \propto 0.65 * 0.83 \\ & \propto 0.5395 \end{align*}
+\begin{align*} \mathbb{P}(X_2 = \text{salmon} \mid X_4 = \text{thin}) & \propto 0.65 \cdot (0.5 \cdot 0.88 + 0 \cdot 0.32 + 0 \cdot 0.42 + 0.5 \cdot 0.78) \\ & \propto 0.65 \cdot (0.44 + 0 + 0 + 0.39) \\ & \propto 0.65 \cdot 0.83 \\ & \propto 0.5395 \end{align*}
 
-\begin{align*} \mathbb{P}(X_2 = \text{sea bass} \mid X_4 = \text{thin}) & \propto 0.06 * (0.5*0.12 + 0*0.68 + 0*0.58 + 0.5*0.22) \\ & \propto 0.06 * (0.06 + 0 + 0 + 0.11) \\ & \propto 0.65 * 0.17 \\ & \propto 0.0102 \end{align*}
+\begin{align*} \mathbb{P}(X_2 = \text{sea bass} \mid X_4 = \text{thin}) & \propto 0.06 \cdot (0.5 \cdot 0.12 + 0 \cdot 0.68 + 0 \cdot 0.58 + 0.5 \cdot 0.22) \\ & \propto 0.06 \cdot (0.06 + 0 + 0 + 0.11) \\ & \propto 0.65 \cdot 0.17 \\ & \propto 0.0102 \end{align*}
 
-For the classification we compare the two results:
+For the classification we compare the two results. As said before, we can ignore the normalizing constant because it is the same for both, so it can be seen as a good evaluation score.
 \[ 0.5395 > 0.0102
 \]
 so we classify the fish as \textbf{salmon}.
-\newpage
 
+\subsection*{1.2.8 \quad Season Inference}
+Suppose the fish is thin \(X_4 = t\) and of medium lightness \(X_3 = m\), we want to understand which season is more likely to have caught the fish \(X_1\).
+
+In other words we want to compute the following posterior distribution
+\begin{equation*}
+\mathbb{P}(X_1=x_1 \mid X_3 = \text{m}, X_4 = \text{t})
+\end{equation*}
+
+Using the Bayes rule we have
+\[
+\mathbb{P}(X_1=x_1 \mid X_3 = \text{m}, X_4 = \text{t}) = \dfrac{\mathbb{P}(X_1=x_1, X_3 = \text{m}, X_4 = \text{t})}{\mathbb{P}(X_3 = \text{m}, X_4 = \text{t})}
+\]
+where the denominator can be seen as a normalizing constant that for our purposes we can ignore. Consequently, we have the following
+\[
+\mathbb{P}(X_1=x_1 \mid X_3 = \text{medium}, X_4 = \text{thin}) \propto \mathbb{P}(X_1=x_1, X_3 = \text{m}, X_4 = \text{t})
+\]
+In order to apply the data given by the problem, we apply the chain rule of probability to the right hand side
+\[
+\mathbb{P}(X_1=x_1, X_3 = \text{m}, X_4 = \text{t})
+= \mathbb{P}(X_1 = x_1) \cdot 
+\textcolor{red}{\mathbb{P}(X_3= \text{m} \mid X_1 = x_1) } \cdot 
+\textcolor{blue}{\mathbb{P}(X_4 = \text{t} \mid X_3 = \text{m}, X_1 = x_1)}
+\]
+Now we can compute each term:
+\paragraph{Term 1 - \( \mathbb{P}(X_1 = x_1) \):} is given by the prior.
+\paragraph{Term 2 - \( \mathbb{P}(X_3= \text{m} \mid X_1 = x_1) \):} it can be computed as follows knowing that for \(X_3\) , \(X_2\) is enough and \(X_1\) is independent of \(X_3\) given \(X_2\)
 \begin{align*}
-\mathbb{P}(X_1=x_1 \big | X_3 = \text{medium}, X_4 = \text{thin}) &= \dfrac{\mathbb{P}(X_1=x_1, X_3 = \text{medium}, X_4 = \text{thin})}{\mathbb{P}(X_3 = \text{medium})\mathbb{P}(X_4 = \text{thin} \big | X_3 = \text{medium})}
-\\
-& \propto \mathbb{P}(X_1=x_1, X_3 = \text{medium}, X_4 = \text{thin})
-\\
-&= \mathbb{P}(X_1 = x_1) \textcolor{red}{\mathbb{P}(X_3= \text{medium} \big | X_1 = x_1)} \\
-& \textcolor{blue}{\mathbb{P}(X_4 = \text{thin} \big | X_3 = \text{medium}, X_1 = x_1)}
+  \textcolor{red}{\mathbb{P}(X_3=\text{m} \mid X_1 = x_1)}
+  &= \sum_{x_2} \mathbb{P}(X_3=\text{m},\, X_2 = x_2 \mid X_1 = x_1)
+  \\
+  &= \sum_{x_2} 
+     \mathbb{P}(X_3=\text{m} \mid X_1=x_1,\, X_2 = x_2)\,
+     \mathbb{P}(X_2 = x_2 \mid X_1 = x_1)
+  \\
+  &= \sum_{x_2} 
+     \mathbb{P}(X_3=\text{m} \mid X_2 = x_2)\,
+     \mathbb{P}(X_2 = x_2 \mid X_1 = x_1)
 \end{align*}
 
+\begin{description}
+    \item[Disclaimer:] the derivation of Term 2 is not strictly necessary for the computations that follow.
+\end{description}
+
+\paragraph{Term 3 - \(\mathbb{P}(X_4 = \text{t} \mid X_3 = \text{m}, X_1 = x_1)\):}
+ it needs to be computed as follows knowing that for \(X_4\), \(X_2\) is enough and \(X_1\)/\(X_3\) is independent from \(X_4\) given \(X_2\):
 \begin{align*}
-\textcolor{blue}{\mathbb{P}(X_4 = \text{T} \big | X_3 = \text{M}, X_1 = x_1)} &= \sum_{x_2} \mathbb{P}(X_4= \text{T}, X_2 = x_2 \big |X_3 = \text{M}, X_1 = x_1) 
+\textcolor{blue}{\mathbb{P}(X_4 = \text{t} \mid X_3 = \text{m}, X_1 = x_1)}
+&= \sum_{x_2} 
+   \mathbb{P}(X_4 = \text{t},\, X_2 = x_2 \mid X_3 = \text{m}, X_1 = x_1)
 \\
-&= \sum_{x_2} \mathbb{P}(X_4= \text{T}, X_2 = x_2 \big |X_3 = \text{M}, X_1 = x_1) 
+&= \sum_{x_2} 
+   \mathbb{P}(X_4 = \text{t} \mid X_2 = x_2,\, X_3 = \text{m},\, X_1 = x_1)\,
+   \mathbb{P}(X_2 = x_2 \mid X_3 = \text{m}, X_1 = x_1)
+\\
+&= \sum_{x_2}
+   \mathbb{P}(X_4 = \text{t} \mid X_2 = x_2)\,
+   \mathbb{P}(X_2 = x_2 \mid X_3 = \text{m}, X_1 = x_1)
+\\
+&= \sum_{x_2}
+   \mathbb{P}(X_4 = \text{t} \mid X_2 = x_2)\,
+   \frac{
+      \mathbb{P}(X_3 = \text{m} \mid X_2 = x_2)\,
+      \mathbb{P}(X_2 = x_2 \mid X_1 = x_1)
+   }{
+      \textcolor{red}{\mathbb{P}(X_3 = \text{m} \mid X_1 = x_1)}
+   }
 \end{align*}
 
+We can build the final expression for the approximation of \( \p (X_1=x_1 \mid X_3 = \text{m}, X_4 = \text{t}) \) substituting the three terms in the equation where \( \textcolor{red}{\mathbb{P}(X_3=\text{m} \mid X_1=x_1)} \) will cancel out:
+\[
+\mathbb{P}(X_1 = x_1) \cdot \sum_{x_2} \mathbb{P}(X_3= \text{m} \mid X_2 = x_2)\cdot \mathbb{P}(X_2 = x_2 \mid X_1 = x_1) \cdot \mathbb{P}(X_4= \text{t} \mid X_2 = x_2 )
+\]
+
+At this point we can compute the above expression for each value of \(X_1\) (the four seasons) and then compare the results to find the most likely season.
+\begin{itemize}
+    \item For \(X_1 = \text{winter}\):
+    \begin{align*}
+    &0.25 \cdot (0.34 \cdot 0.88 \cdot 0.65 + 0.12 \cdot 0.12 \cdot 0.06) \\
+    &= 0.048836
+    \end{align*}
+    \item For \(X_1 = \text{spring}\):
+    \begin{align*}
+    &0.25 \cdot (0.34 \cdot 0.32 \cdot 0.65 + 0.12 \cdot 0.68 \cdot 0.06) \\
+    &= 0.018904
+    \end{align*}
+    \item For \(X_1 = \text{summer}\):
+    \begin{align*}
+    &0.25 \cdot (0.34 \cdot 0.42 \cdot 0.65 + 0.12 \cdot 0.58 \cdot0.06) \\
+    &= 0.024249
+    \end{align*}
+    \item For \(X_1 = \text{autumn}\):
+     \begin{align*}
+    &0.25 \cdot (0.34 \cdot 0.78 \cdot 0.65 + 0.12 \cdot 0.22 \cdot 0.06) \\
+    &= 0.043491
+    \end{align*}
+\end{itemize}
+
+Comparing the results we have that the most likely season is \textbf{winter}.
+
+
+\section*{1.3 \quad CAVI}
+
+\subsection*{1.3.11 \quad Exact posterior derivation}
+We know that the model is defined in this assignment is defined as follows
+\[
+X_n \mid \mu, \tau \sim \mathcal{N}\!\left(\mu, \frac{1}{\tau}\right), 
+\qquad 
+(\mu, \tau) \sim \mathcal{N}\Gamma(\mu_0, \lambda_0, \alpha_0, \beta_0)
+\]
+Using the Bayes rule we can write the posterior as:
+\[
+\p(\theta \mid D) = \frac{\p(D \mid \theta) \cdot \p(\theta)}{\p(D)} \propto \p(D \mid \theta)\cdot \p(\theta)
+\]
+where:
+\begin{itemize}
+    \item \begin{math}P(\theta) = P(\mu, \tau)\end{math} is the prior distribution
+
+Knowing that:
+\[
+\p(\tau) \sim \text{Gamma}(\alpha_0, \beta_0) \qquad
+\p(\mu \mid \tau) \sim \mathcal{N}\!\left(\mu_0, \frac{1}{\lambda_0 \tau}\right)
+\]
+\[
+\p(\mu,\tau) 
+= \p(\tau) \cdot \p(\mu \mid \tau)
+= \frac{\beta_0^{\alpha_0}}{\Gamma(\alpha_0)} \sqrt{\frac{\lambda_0 \tau}{2\pi}}
+\tau^{\alpha_0 - 1} 
+e^{ \!-\beta_0 \tau}
+e^{\!-\frac{\lambda_0 \tau}{2}(\mu - \mu_0)^2}
+\]
+    \item \begin{math}\p(D \mid \theta)\end{math} is the likelihood of the data
+\end{itemize}
+\[
+\p(D \mid \theta) = \prod_{n=1}^N f_\theta(x_n)
+= \prod_{n=1}^N 
+ \sqrt{\frac{\tau}{2\pi}}
+e^{\!
+-\frac{\tau}{2} (x_n - \mu)^2
+}
+\]
+We can now write the log-posterior ignoring the terms that are constants with respect to \(\mu\) and \(\tau\)
+\[
+\log P(\mu,\tau \mid X)
+= \log \left(\prod_{n=1}^N P(x_n | \mu, \tau) P(\mu, \tau)\right)
+= \sum_{n=1}^N \log P(x_n | \mu, \tau) + \log P(\mu, \tau)
+\]
+\[
+\propto
+\sum_{n=1}^N 
+\left[
+\frac{1}{2}\log \tau 
+- \frac{1}{2}\log(2\pi)
+- \frac{\tau}{2}(x_n - \mu)^2
+\right]
++
+\left[
+\frac{1}{2}\log\!\left(\frac{\lambda_0 \tau }{2\pi}\right)
++ (\alpha_0 - 1)\log\tau
+- \beta_0\tau
+- \frac{\lambda_0 \tau}{2}(\mu - \mu_0)^2
+\right]
+\]
+\[
+\propto
+\frac{N}{2} \log \tau - \frac{\tau}{2}\sum_{n=1}^N (x_n - \mu)^2
++ \left(\alpha_0 - \dfrac{1}{2}\right)\log \tau
+- \beta_0 \tau
+- \frac{\lambda_0 \tau}{2}(\mu - \mu_0)^2
+\]
+\[
+\propto
+\frac{N}{2} \log \tau - \frac{\tau}{2}\sum_{n=1}^N ({x_n}^2 - 2x_n\mu + \mu^2)
++ \left(\alpha_0 - \dfrac{1}{2}\right)\log \tau
+- \beta_0 \tau
+- \frac{\lambda_0 \tau}{2}(\mu^2 - 2\mu\mu_0 + \mu_0^2)
+\]
+\[
+\propto
+\left(\frac{N}{2} + \alpha_0 -\dfrac{1}{2}\right)\log \tau - \beta_0 \tau  - \frac{\tau}{2}\left[\mu^2 (N + \lambda_0) - 2 \mu \left(\sum_{n=1}^N x_n + \lambda_0 \mu_0\right) + \sum_{n=1}^N {x_n}^2 + \lambda_0 \mu_0^2\right]
+\]
+\[
+\propto
+\left(\frac{N}{2} + \alpha_0 -\dfrac{1}{2}\right)\log \tau - \beta_0 \tau  - \frac{\tau}{2}(N+\lambda_0)\left[\mu^2 - \frac{2 \mu}{N+\lambda_0} \left(\sum_{n=1}^N x_n + \lambda_0 \mu_0\right) + \frac{1}{N+\lambda_0}\left(\sum_{n=1}^N {x_n}^2 + \lambda_0 \mu_0^2\right)\right]
+\]
+We can define C as:
+\[
+C = \frac{1}{N+\lambda_0}\sum_{n=1}^N \left({x_n}^2 + \lambda_0 \mu_0^2\right)
+\]
+Continuing from the previous expression we have:
+\[
+\propto
+\left(\frac{N}{2} + \alpha_0 -\dfrac{1}{2}\right)\log \tau - \beta_0 \tau  - \frac{\tau}{2}(N+\lambda_0)[\mu^2 - \frac{2 \mu}{N+\lambda_0} (\sum_{n=1}^N x_n + \lambda_0 \mu_0) + C]
+\]
+
+\[
+\propto
+\left(\frac{N}{2} + \alpha_0 -\dfrac{1}{2}\right)\log \tau - \tau \left(\beta_0 + \frac{C}{2} ( N + \lambda_0)\right)  - \frac{\tau}{2}(N+\lambda_0)\left[\mu^2 - \frac{2 \mu}{N+\lambda_0} \left(\sum_{n=1}^N x_n + \lambda_0 \mu_0\right)\right]
+\]
+We can define D as:
+\[
+D = \frac{2 \mu}{N+\lambda_0} \left(\sum_{n=1}^N x_n + \lambda_0 \mu_0\right)
+\]
+And in order to complete the square we can add and subtract \(\textcolor{gray}{\frac{D^2 \tau (N+\lambda_0)}{2}}\)
+\[
+\propto
+\left(\frac{N}{2} + \alpha_0 -\dfrac{1}{2}\right)\log \tau - \tau \left(\beta_0 + \frac{C}{2} ( N + \lambda_0)\right)  - \frac{\tau}{2}(N+\lambda_0)\left[\mu^2 - \frac{2 \mu}{N+\lambda_0} D\right] \textcolor{gray}{+\frac{D^2 \tau (N+\lambda_0)}{2} - \frac{D^2 \tau (N+\lambda_0)}{2}}
+\]
+
+\[
+=\left(\frac{N}{2} + \alpha_0 -\dfrac{1}{2}\right)\log \tau - \tau \left(\beta_0 + \frac{C}{2} \left( N + \lambda_0\right) - \frac{N+\lambda_0}{2} D^2\right) - \frac{\tau}{2}(N+\lambda_0)[\mu^2 - 2\mu D  + D^2]
+\]
+\[
+=\left(\frac{N}{2} + \alpha_0 -\dfrac{1}{2}\right)\log \tau - \tau \left(\beta_0 + \frac{C}{2} ( N + \lambda_0) - \frac{N+\lambda_0}{2} D^2\right)  - \frac{\tau}{2}(N+\lambda_0)[\mu - D]^2
+\]
+We can rewrite it as:
+\[
+\log P(\mu,\tau \mid X) \propto \left(\alpha_0^* - \dfrac{1}{2}\right) \log \tau - \beta_0^* \tau - \frac{\tau \lambda_0^*}{2}(\mu - \mu_0^*)^2
+\]
+We recognize the kernel of a Normal-Gamma distribution, so the posterior is distributed as:
+\[
+P(\mu,\tau \mid X)
+\sim
+\mathcal{N}\Gamma\!\left(
+\mu_0^*,\,
+\lambda_0^*,\,
+\alpha_0^*,\,
+\beta_0^*
+\right)
+\]
+
+with updated parameters:
+
+\[
+\alpha_0^* = \alpha_0 + \frac{N}{2}
+\]
+
+\[
+\lambda_0^* = N + \lambda_0
+\]
+
+\[
+\mu_0^* = D 
+= \frac{\lambda_0 \mu_0 + \sum x_n}{\,\lambda_0 + N\,}
+\]
+
+\[
+\beta_0^* = \beta_0 + \frac{ N + \lambda_0}{2}(C-D^2)
+= \beta_0
++ \frac{1}{2}
+\left[
+\sum x_n^2 
++ \lambda_0 \mu_0^2
+-\lambda_0^* {\mu_0^*}^2
+\right]
+\]
+
+\subsection*{1.3.12 \quad VI algorithm implementation}
+
+\subsubsection*{Derivation of CAVI updates}
+
+\begin{align*}
+\log q^*(\tau) 
+&= \E_{q(\mu)} \big[ \log p(\tau, X \mid \mu) \big] \\[6pt]
+&= \E_{q(\mu)} \Big[
+(a_0 - \tfrac{1}{2}) \log \tau 
+- \beta_0 \tau 
+- \frac{\lambda_0}{2} (\mu - \mu_0)^2
++ \frac{N}{2} \log \tau 
+- \frac{\tau}{2} \sum_{i=1}^N (x_i - \mu)^2
+\Big] \\[6pt]
+&= \big( a_0 - \tfrac{1}{2} + \tfrac{N}{2} \big) \log \tau
+\;-\; \tau \Big(
+\beta_0 
++ \frac{\lambda_0}{2} \E_{q(\mu)}[(\mu - \mu_0)^2]
++ \frac{1}{2} \E_{q(\mu)} \Big[ \sum_{i=1}^N (x_i - \mu)^2 \Big]
+\Big) \\[6pt]
+&= \log \tau \;\big( a_0 + \tfrac{N}{2} - \tfrac{1}{2}\big)
+- \tau \Big( 
+\beta_0 + \frac{\lambda_0}{2} \E_{q(\mu)}[(\mu-\mu_0)^2]
++ \frac{1}{2} \E_{q(\mu)} \sum_{i=1}^N (x_i - \mu)^2
+\Big)
+\end{align*}
+
+\[
+q^*(\tau) \propto 
+\tau^{\,a_0 + \frac{N}{2} - \frac{1}{2} - 1}\;
+\exp\!\left(
+-\tau \Big[
+\beta_0
++ \frac{\lambda_0}{2}\E_{q(\mu)}[(\mu-\mu_0)^2]
++ \frac{1}{2}\E_{q(\mu)} \sum_{i=1}^N (x_i - \mu)^2
+\Big]
+\right)
+\]
+
+\begin{equation}
+  \q(\tau) \sim \text{Gam} (\alpha_N, \beta_N)
+  \label{eq:q_tau}
+\end{equation}
+
+\begin{equation}
+  \alpha_N = \alpha_0 + \dfrac{N+1}{2}
+  \label{eq:a_N}
+\end{equation}
+
+\begin{equation}
+  \beta_N = b_0 + \dfrac{\E_{q(\mu)}}{2}\bigg[
+\lambda_0 (\mu - \mu_0)^2 + \sum^N_{n = 1} (x_i - \mu)^2
+\bigg] 
+  \label{eq:b_N}
+\end{equation}
+
+\begin{align*}
+\log q^*(\mu)
+&= \E_{q(\tau)} \big[ \log p(\mu, X \mid \tau) \big] \\[4pt]
+&= \E_{q(\tau)} \Big[
+-\frac{\lambda_0\tau}{2} (\mu - \mu_0)^2
+- \frac{\tau}{2} \sum_{i=1}^N (x_i - \mu)^2
+\Big] \\[6pt]
+&= - \frac{\E_{q(\tau)}[\tau]}{2}
+\Big[ 
+\lambda_0 (\mu - \mu_0)^2
++ \sum_{i=1}^N (x_i - \mu)^2
+\Big].
+\end{align*}
+
+
+\begin{equation}
+  \q(\mu) \sim \mathcal{N} (\mu_N, \lambda_N)
+  \label{eq:q_mu}
+\end{equation}
+
+\begin{equation}
+  \mu_N = \dfrac{\lambda_0 \mu_0 + \sum x_n}{\lambda_0 + N}
+  \label{eq:mu_N}
+\end{equation}
+
+\begin{equation}
+  \lambda_N = \E_{q(\tau)}[\tau](\lambda_0 + N)
+  \label{eq:lambda_N}
+\end{equation}
+
+\subsubsection*{Derivation of the ELBO}
+
+We now derive the Evidence Lower Bound by expanding each term in
+\(\E_q[\log p(D,\mu,\tau)]\) and \(\E_q[\log q(\mu,\tau)]\).
+All expectations will be computed using the variational distributions
+\(q(\mu)\) in \eqref{eq:q_mu} and \(q(\tau)\) in \eqref{eq:q_tau}.
+In particular, note that:
+\[
+\E_q[\mu] = \mu_N \quad \text{from } \eqref{eq:mu_N}, 
+\qquad 
+\E_q[\mu^2] = \frac{1}{\lambda_N} + \mu_N^2 \quad \text{from } \eqref{eq:q_mu},
+\]
+and, analogously for the Gamma distribution in \eqref{eq:q_tau},
+\[
+\E_q[\tau] = \frac{\alpha_N}{\beta_N}, \qquad
+\E_q[\log \tau] = \psi(\alpha_N) - \log \beta_N.
+\]
+
+We start from the ELBO definition:
+\begin{align*}
+\elbo 
+&= \E_q \left[ \log \frac{\p(D, \mu, \tau)}{\q(\mu, \tau)} \right] \\
+&= \E_q [\log \p(D, \mu, \tau)] - \E_q [\log \q (\mu, \tau)]\\
+&= \textcolor{red}{\E_q [\log \p (\mu \mid \lambda_0, \mu_0, \tau)]}
++ \textcolor{blue}{\E_q [\log \p (\tau \mid \alpha_0, b_0)]} 
++ \textcolor{olive}{\E_q [\log \p (D \mid \mu, \tau)]}
+\\ &\quad- \textcolor{orange}{\E_q [\log \q (\mu)]} 
+- \textcolor{magenta}{\E_q [\log \q (\tau)]}
+\end{align*}
+
+The joint log-density separates into prior terms for \(\mu\) and \(\tau\) plus
+the likelihood term for the dataset \(D\).
+
+The following sections compute each coloured term separately.
+
+\paragraph{Term 1: \( \E_q[\log p(\mu \mid \lambda_0, \mu_0, \tau)] \)}
+We use the Normal prior over \(\mu\), whose log-density depends on 
+\(\log\tau\) and on the quadratic term \((\mu-\mu_0)^2\). Substituting
+the expressions and applying expectations using the moments of 
+\(q(\mu)\) from \eqref{eq:q_mu}, we obtain:
+
+\begin{align*}
+\textcolor{red}{\E_q [\log \p (\mu \mid \lambda_0, \mu_0, \tau)]}
+&= \E_q \bigg[ \frac{1}{2} \log \tau 
++ \frac{1}{2} \log \frac{\lambda_0}{2 \pi} 
+- \frac{1}{2}\lambda_0 \tau (\mu - \mu_0)^2\bigg]
+\\
+&= \frac{1}{2} \log \frac{\lambda_0}{2 \pi} 
++ \frac{1}{2} \E_q [\log \tau ] 
+- \frac{1}{2}\lambda_0 \E_q [\tau]\Big(\E_q[\mu^2]-2\mu_0\E_q[\mu]+\mu_0^2\Big)
+\end{align*}
+
+\paragraph{Term 2: \( \E_q[\log p(\tau \mid \alpha_0, b_0)] \)}
+Using the Gamma prior, whose log-density is linear in \(\log\tau\) and \(\tau\),
+and substituting expectations using the parameters from \eqref{eq:a_N}-\eqref{eq:b_N}:
+
+\begin{align*}
+\textcolor{blue}{\E_q [\log \p (\tau \mid \alpha_0, b_0)]} 
+&= \E_q\big[\alpha_0 \log b_0 - \log \Gamma(\alpha_0) + (\alpha_0 -1)\log \tau - b_0 \tau\big]\\
+&= \alpha_0 \log b_0 - \log \Gamma(\alpha_0) 
++ (\alpha_0 -1) \E_q[\log \tau] - b_0 \E_q[\tau]
+\end{align*}
+
+
+\paragraph{Term 3: \( \E_q[\log p(D \mid \mu, \tau)] \)}
+The likelihood factorizes over the observations and contains terms depending on 
+\((x_n - \mu)^2\). Using \(\E_q[(x_n-\mu)^2]\) computed from 
+\eqref{eq:q_mu}, we obtain:
+
+\begin{align*}
+\textcolor{olive}{\E_q [\log \p (D \mid \mu, \tau)]} 
+&= \E_q \bigg[ \log \bigg(\prod_{n = 1}^{N} \p (x_n \mid \mu, \tau)\bigg)\bigg]  
+= \E_q \bigg[ \sum_{n = 1}^{N} \log \p (x_n \mid \mu, \tau)\bigg]
+\\
+&= \sum_{n = 1}^{N} \E_q \bigg[\log \bigg(\sqrt{\frac{\tau}{2 \pi}} 
+\, e^{-\frac{\tau}{2}(x_n - \mu)^2}\bigg)\bigg] 
+\\
+&= \sum_{n = 1}^{N} \E_q \bigg[ \frac{1}{2}\log \tau 
+- \frac{1}{2} \log (2 \pi) 
+- \frac{\tau}{2}(x_n - \mu)^2 \bigg] 
+\\
+&= \frac{N}{2} \E_q [\log \tau] - \frac{N}{2} \log (2 \pi)
+- \frac{1}{2} \E_q[\tau] 
+\sum_{n = 1}^{N} \E_q\big[(x_n - \mu)^2\big]
+\\
+&= \frac{N}{2} \E_q [\log \tau] - \frac{N}{2} \log (2 \pi)
+- \frac{1}{2} \E_q[\tau] 
+\bigg(\sum_{n = 1}^{N} x_n^2 
+- 2 \E_q[\mu]\sum_{n = 1}^{N} x_n 
++ N \E_q[\mu^2]\bigg)
+\end{align*}
+
+
+\paragraph{Term 4: \( \E_q[\log q(\mu)] \)} 
+The entropy term of the Gaussian \(q(\mu)\) in \eqref{eq:q_mu} yields:
+
+\begin{align*}
+\textcolor{orange}{\E_q [\log \q (\mu)]} 
+&= \E_q \bigg[\log \bigg(\sqrt{\frac{\lambda_N}{2 \pi}} 
+\, e^{-\frac{\lambda_N}{2}(\mu - \mu_N)^2}\bigg)\bigg] 
+\\
+&= \E_q \bigg[ \frac{1}{2}\log \frac{\lambda_N}{2 \pi} 
+- \frac{\lambda_N}{2}(\mu - \mu_N)^2 \bigg] 
+\\
+&= \frac{1}{2}\log \frac{\lambda_N}{2 \pi} 
+- \frac{\lambda_N}{2} \E_q \big[(\mu - \mu_N)^2\big]
+\\
+&= \frac{1}{2}\log \frac{\lambda_N}{2 \pi} 
+- \frac{\lambda_N}{2} \cdot \frac{1}{\lambda_N}
+\\
+&= \frac{1}{2}\bigg(\log \frac{\lambda_N}{2 \pi} - 1\bigg)
+\end{align*}
+
+
+\paragraph{Term 5: \( \E_q[\log q(\tau)] \)}
+Finally, for the Gamma variational distribution in \eqref{eq:q_tau}:
+
+\begin{align*}
+\textcolor{magenta}{\E_q [\log \q (\tau)]} 
+&= \E_q\big[\alpha_N \log \beta_N - \log \Gamma(\alpha_N) + (\alpha_N -1)\log \tau - \beta_N \tau\big]\\
+&= \alpha_N \log \beta_N - \log \Gamma(\alpha_N) 
++ (\alpha_N -1) \E_q[\log \tau] - \beta_N \E_q[\tau]
+\end{align*}
+
+This completes the derivation of the ELBO, expressed entirely in terms of the 
+variational parameters  
+\(\mu_N\), \(\lambda_N\), \(\alpha_N\), \(\beta_N\),  
+which correspond directly to the CAVI updates given in 
+\eqref{eq:q_mu}-\eqref{eq:b_N}, and \(\mu_0\), \(\lambda_0\), \(\alpha_0\), \(b_0\).
+
+\subsubsection*{Conclusions}
 
 \end{document}
