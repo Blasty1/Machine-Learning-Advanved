@@ -10,6 +10,7 @@ Work assignment:
     - Question 2.2.6 ✅
     - Question 2.2.7 ( 2E-LDA-SVI file )
         - SVI implementation and evaluation code
+        - updates of parameters done, working on SVI algorithm main function 
 
 - Question 2.3 &rarr; **Riccardo**
     - Question 2.3.8 ✅
