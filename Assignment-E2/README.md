@@ -2,6 +2,7 @@ Work assignment:
 - Question 2.1 &rarr; **Riccardo** ✅
     - Question 2.1.1 ✅
     - Question 2.1.2 ✅
+        - It needs a check
     - Question 2.1.3 ✅
     - Question 2.1.4 ✅
 - Question 2.2 &rarr; **Bruno**
