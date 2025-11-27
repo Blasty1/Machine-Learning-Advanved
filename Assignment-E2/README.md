@@ -5,14 +5,13 @@ Work assignment:
         - It needs a check
     - Question 2.1.3 ✅
     - Question 2.1.4 ✅
-- Question 2.2 &rarr; **Bruno**
+- Question 2.2 &rarr; **Bruno** ✅
     - Question 2.2.5 ✅
     - Question 2.2.6 ✅
-    - Question 2.2.7 ( 2E-LDA-SVI file )
-        - SVI implementation and evaluation code
-        - updates of parameters done, working on SVI algorithm main function 
+    - Question 2.2.7 ( 2E-LDA-SVI file ) ✅
+        - I have to write only the final comment
 
-- Question 2.3 &rarr; **Riccardo**
+- Question 2.3 &rarr; **Riccardo** ✅
     - Question 2.3.8 ✅
     - Question 2.3.9 ✅
 
