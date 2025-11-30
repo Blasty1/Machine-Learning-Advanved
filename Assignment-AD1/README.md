@@ -23,11 +23,11 @@ Work assignment:
     - 1.C.3
         - 2.2.13 
     - 1.C.4
-        - 2.2.14
-        - 2.2.15
-        - 2.2.16
-        - 2.2.17
-        - 2.2.18
-        - 2.2.19
+        - 2.2.14 ✅ 
+        - 2.2.15 ✅
+        - 2.2.16 ✅ ( da controllare , la matrice inversa sembra non corretta , è come se beta fosse in realtà 1/beta )
+        - 2.2.17 ✅
+        - 2.2.18 ✅
+        - 2.2.19 ✅ ( da scrivere solo il commento, i grafici sono ok )
 
 
