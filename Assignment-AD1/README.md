@@ -25,9 +25,26 @@ Work assignment:
     - 1.C.4
         - 2.2.14 ✅ 
         - 2.2.15 ✅
-        - 2.2.16 ✅ ( da controllare , la matrice inversa sembra non corretta , è come se beta fosse in realtà 1/beta )
+        - 2.2.16 ✅ ( da controllare , la matrice inversa sembra non corretta , è come se beta fosse in realtà 1/beta -> leggere l'email di Marzia )
         - 2.2.17 ✅
         - 2.2.18 ✅
         - 2.2.19 ✅ ( da scrivere solo il commento, i grafici sono ok )
+
+- Assignment B
+    - B.1
+       - 3.1.20 ✅
+    - B.2
+        - 3.1.21
+        - 3.1.22
+        - 3.1.23
+        - 3.1.24
+        - 3.1.25
+- Assignment A
+    - A.1
+        - 4.1.26 
+    - A.2
+        - 4.2.27
+        - 4.2.28
+
 
 
