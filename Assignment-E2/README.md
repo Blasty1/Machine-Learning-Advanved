@@ -2,7 +2,6 @@ Work assignment:
 - Question 2.1 &rarr; **Riccardo** ✅
     - Question 2.1.1 ✅
     - Question 2.1.2 ✅
-        - It needs a check
     - Question 2.1.3 ✅
     - Question 2.1.4 ✅
 - Question 2.2 &rarr; **Bruno** ✅
@@ -21,5 +20,5 @@ Work assignment:
     - Q5.2: State the D_KL, gaussian case &rarr; **Riccardo** ✅
     - Q5.3: Implement the loss ( the negative ELBO ) &rarr; **Riccardo**
     - Q6.1: Fill the missing lines about training the model &rarr; **Bruno** ✅
-    - Q7.1: get the latent representation of each batch of the dataset &rarr; **Riccardo**
+    - Q7.1: get the latent representation of each batch of the dataset &rarr; **Riccardo** ✅
 
