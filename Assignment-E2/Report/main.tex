@@ -19,10 +19,66 @@
 \author{
 Riccardo Alfonso Cerrone \\
   \texttt{cerrone@kth.se}
+\and
+Bruno Carchia \\
+  \texttt{carchia@kth.se}
 }
 
 \begin{document}
 \maketitle
+\section*{2.1 \quad Exponential Family}
+\subsection*{Question 2.1.1}
+The Poisson distribution is
+\[
+p(x\mid \lambda)
+ = \frac{\lambda^x}{x!} e^{-\lambda}.
+\]
+We can rewrite it as:
+\[
+p(x\mid\lambda)
+ = \frac{1}{x!}e^{\!\left(x\log\lambda - \lambda\right)},
+ = h(x) e^{\eta^T t(x) - a(\eta)}
+ \]
+We assume
+\[ \eta = \log \lambda\]
+\[ \lambda = e^{\eta}\]
+\[
+h(x)=\frac{1}{x!},\qquad
+t(x)=x,\qquad
+a(\eta)=e^{\eta}.
+\]
+Final result 
+\[
+p(x|\lambda) = \frac{1}{x!} e^{x\eta - e^{\eta}}
+\]
+
+\subsection*{Question 2.1.2}
+By definition , we know that:
+\begin{align*}
+  G(\lambda)
+  &=  \mathbb{E}_{\lambda}\!\left[
+        (\nabla_{\lambda} \log p(\beta \mid \lambda))
+        (\nabla_{\lambda} \log p(\beta \mid \lambda))^{\top}
+      \right]
+  \\
+  &= \mathbb{E}_{\lambda}\!\left[
+        (\, t(\beta) - \mathbb{E}_{\lambda}[t(\beta)]\,)
+        (\, t(\beta) - \mathbb{E}_{\lambda}[t(\beta)]\,)^{\top}
+      \right]
+  \\
+  &= \nabla_{\lambda}^2 a_g(\lambda)
+\end{align*}
+In our case, we express it wrt the natural parameters
+\[
+ G(\lambda)
+  =  \mathbb{E}_{\eta}\!\left[
+        (\nabla_{\eta} \log p(\beta \mid \eta))
+        (\nabla_{\eta} \log p(\beta \mid \eta))^{\top}
+      \right]
+\]
+We can exploit the propertiesof the exponential family distributions
+
+
 
 \section*{2.2 \quad SVI - LDA}
 \subsection*{Question 2.2.5}
