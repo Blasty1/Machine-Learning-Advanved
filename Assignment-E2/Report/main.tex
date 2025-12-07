@@ -70,15 +70,68 @@ By definition , we know that:
 \end{align*}
 In our case, we express it wrt the natural parameters
 \[
- G(\lambda)
+ I(\eta)
   =  \mathbb{E}_{\eta}\!\left[
         (\nabla_{\eta} \log p(\beta \mid \eta))
         (\nabla_{\eta} \log p(\beta \mid \eta))^{\top}
       \right]
 \]
-We can exploit the propertiesof the exponential family distributions
-
-
+We can exploit the properties of the exponential family
+\[ P(x | \eta) = h(x) e^{\eta^T t(x) - a(\eta)}              \]
+\[ \log P(x | \eta)= \log h(x) + \eta^T t(x) - a(\eta)       \]
+\[ \nabla_\eta \log P(x | \eta) = t(x) - \nabla_\eta a(\eta) \]
+We use it for the definition of the Fisher Information
+\[
+I(\eta) = [(t(x) - \nabla_\eta a(\eta)) (t(x) - \nabla_\eta a(\eta))^T]
+\]
+Knowing that \( E_{p(x|\eta)}[t(x)] = \nabla a(\eta) \) , we can rewrite it as
+\[
+I(\eta) = [(t(x) - E_{p(x|\eta)}[t(x)]) (t(x) - E_{p(x|\eta)}[t(x)])^T]
+\]
+\[
+I(\eta) = \nabla_\eta^2 a(\eta)
+\]
+In our case:
+\[ a(\eta) = e^\eta \]
+\[ \eta = \log \lambda \]
+\[ \lambda = e^\eta \]
+We get
+\[
+I(\eta) = e^\eta = e^{\log \lambda} = \lambda
+\]
+We need to use the transformation function 
+\[
+I_\lambda(\lambda) = I_\eta ( \eta(\lambda)) (\frac{\partial \eta}{\partial \lambda})^2
+\]
+\[I_\lambda(\lambda) = \lambda \cdot \frac{1}{\lambda^2} = \frac{1}{\lambda}\]
+This formula can be obtained by using the chain rule in the derivation process as showed below
+\[
+ I(\eta)
+  =  \mathbb{E}\!\left[
+        (\nabla_{\eta} \log p(\beta \mid \eta))
+        (\nabla_{\eta} \log p(\beta \mid \eta))^{\top}
+      \right]
+\]
+\[
+\nabla_{\eta} \log p(\beta \mid \eta) = \nabla_{\lambda} \log p(\beta \mid \lambda) \cdot \frac{d \lambda}{d \eta}
+\]
+\[
+ I(\eta)
+  =  \mathbb{E}\!\left[
+        (\frac{d \lambda}{d \eta})^2
+        (\nabla_{\lambda} \log p(\beta \mid \lambda))
+        (\nabla_{\lambda} \log p(\beta \mid \lambda))^T
+      \right]
+\]
+\[
+I(\eta) = (\frac{d \lambda}{d \eta})^2 \mathbb{E}_\lambda\!\left[
+        (\nabla_{\lambda} \log p(\beta \mid \lambda))
+        (\nabla_{\lambda} \log p(\beta \mid \lambda))^T
+      \right]
+\]
+\[
+I(\eta) = (\frac{d \lambda}{d \eta})^2 \cdot I(\eta)
+\]
 
 \section*{2.2 \quad SVI - LDA}
 \subsection*{Question 2.2.5}
