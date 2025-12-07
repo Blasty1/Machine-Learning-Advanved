@@ -6,6 +6,7 @@
 \usepackage{xcolor}
 \usepackage{graphicx}
 
+\usepackage{float}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 
@@ -167,6 +168,163 @@ We need just to replace each component inside the definition of exponential fami
 = & \frac{1}{x\sqrt{2\pi\sigma^2}} e^{-\frac{(\log x - \mu)^2}{2\sigma^2}} \sim \text{ logNormal }(\mu, \sigma^2)
 \end{align*}
 
+
+\section*{2.2 \quad SVI - LDA}
+\subsection*{Question 2.2.5}
+
+Given the model described in the Hoffman paper, let us define \(x_n\) as the \(n\)-th observation, \(z_n\) as the \(n\)-th local hidden variable, \(\beta\) as the global hidden variables, and \(\alpha\) as the fixed hyperparameters. According to this notation and the corresponding graphical model, the joint distribution can be written as
+\begin{equation}
+    p(X, Z, \beta \mid \alpha)
+    = p(\beta \mid \alpha)\,
+      \prod_{n=1}^{N} \textcolor{blue}{p(x_n, z_n \mid \beta)}.
+\end{equation}
+
+The equality 
+\begin{equation*}
+    p(x_n, z_n \mid x_{-n}, z_{-n}, \beta)
+    = \textcolor{blue}{p(x_n, z_n \mid \beta)}.
+\end{equation*}
+holds because of the fork structure in the graphical model: given the global variables \(\beta\), each pair \((x_n, z_n)\) is conditionally independent of all other pairs \((x_{-n}, z_{-n})\), therefore it is dependent on the global variables only.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.4\linewidth]{fig/1.jpeg}
+    \caption{V structures in the given model (green and blue)}
+    \label{fig:V_structure}
+\end{figure}
+
+The global variables \(\beta\) are parameters equipped with a prior distribution \(p(\beta)\), while each local variable \(z_n\) contains the latent structure associated with the \(n\)-th observation.
+
+The variables \(z_n\) are called \emph{local} because each of them is tied solely to its corresponding observation \(x_n\) and does not interact with the other local hidden variables.
+
+
+\subsection*{Question 2.2.6}
+
+\paragraph{Defining the model} First of all, we need to specify the model we are working with. As stated in the Hoffman paper, in LDA it is possible to make a clear distinction between local and global variables. In topic modeling
+\begin{itemize}
+  \item The local context is a document $d$
+  \item The local observations are its observed words $w_{d, 1:N}$
+  \item The local hidden variables are the topic proportions $\theta_d$ and the topic assignments $z_{d, 1:N}$
+  \item The global hidden variables are the topics $\beta_{1:K}$
+\end{itemize}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.5\linewidth]{fig/2.jpeg}
+  \caption{Graphical model representation of Latent Dirichlet allocation}
+  \label{fig:LDA}
+\end{figure}
+
+The joint probability of the given model can be summarized as follows
+
+\begin{equation}
+  p \left(\theta, Z, X, w, \beta \vert \alpha, \eta\right) = \prod^K_{k = 1} p\left(\beta_k \vert \eta\right) \prod^D_{d} \textcolor{red}{p\left(\theta_d | \alpha\right)} \prod^{D, N}_{d, n} \textcolor{orange}{p\left(z_{d, n} \vert \theta_{d}\right)} \cdot p\left(w_{d, n} \vert \beta, z_{d, n}\right)
+\end{equation}
+
+In order to prove that the equation is consistent with the defintion given the previous question, we need to prove every relevant term of the equation (colored terms).
+
+\paragraph{First term}
+\begin{equation*}
+  p\left(z_{d, n} \vert \theta_d, z_{-(d, n)}\right) = \textcolor{red}{p\left(z_{d, n} \vert \theta_d\right)}
+\end{equation*}
+
+According to the problem we want to address, we want to prove the d-separation of $z_{d, n}$ from $z_{-(d, n)}$ given $\theta_d$.
+
+\begin{center}
+    \includegraphics[width=0.5\textwidth]{fig/Map1.jpeg}
+\end{center}
+
+In order to do so, we analyse the graphical model from three different points of view:
+
+\begin{enumerate}
+  \item Given $\theta_d$, for every $n$ the nodes $z_{d,n}$ and $z_{d,n+1}$ form a fork structure with common parent $\theta_d$. 
+  This means that, once we condition on $\theta_d$, there is no flow of information between $z_{d,n}$ and $z_{d,n+1}$ (and, more generally, between $z_{d,n}$ and any other $z_{d,m}$ with $m \neq n$).
+
+  \item The variable $w_{d,n}$ does not appear in the conditional distribution we want to prove. 
+  In the graph, $z_{d,n}$ and $\beta_k$ are connected only through the V-structure $z_{d,n} \to w_{d,n} \leftarrow \beta_k$. 
+  Since we are not conditioning on $w_{d,n}$, this collider blocks the path, and therefore there is no flow of information between $z_{d,n}$ and $\beta_k$.
+
+  \item Given $\alpha$, for every pair of documents $d$ and $d+1$ the nodes $\theta_d$ and $\theta_{d+1}$ form a fork structure with common parent $\alpha$. 
+  Hence, once we condition on $\alpha$, there is no flow of information between $\theta_d$ and $\theta_{d+1}$.
+\end{enumerate}
+
+\begin{center}
+    \includegraphics[width=0.3\textwidth]{fig/T1.jpeg}
+    \includegraphics[width=0.3\textwidth]{fig/T2.jpeg}
+    \includegraphics[width=0.3\textwidth]{fig/T3.jpeg}
+\end{center}
+
+According to the previous points, we have complete d-separation, so it is possible to remove the $z_{-(d, n)}$ from the formula.
+
+
+\paragraph{Second term}
+\begin{equation*}
+  p \left(\theta_d \vert \alpha, \theta_{-d}\right) = \textcolor{orange}{p\left(\theta_d \vert \alpha\right)}
+\end{equation*}
+
+Similarly as before, we want to prove the d-separation of $\theta_d$ from $\theta_{-d}$ given $\alpha$.
+
+\begin{center}
+    \includegraphics[width=0.5\textwidth]{fig/Map2.jpeg}
+\end{center}
+
+\begin{enumerate}
+  \item Same as point 2.
+  \item Same as point 3.
+\end{enumerate}
+
+\begin{center}
+    \includegraphics[width=0.3\textwidth]{fig/T2.jpeg}
+    \includegraphics[width=0.3\textwidth]{fig/T3.jpeg}
+\end{center}
+
+According to the previous points, we have complete d-separation, so it is possible to remove the $\theta_{-d}$ from the formula.
+
+\subsection*{Question 2.2.7}
+
+\subsubsection*{Implementation}
+For this question, we were asked to implement the SVI updates and the SVI algorithm for the LDA model. To do so, we followed the formulation of Latent Dirichlet Allocation given in Section 3.2 of Hoffman et al.
+
+In order to do the exercise, we have implemented the algorithm following the paper version for Latent Dirichlet Allocation.
+\begin{algorithm}[H]
+\caption{Stochastic Variational Inference for LDA}
+\label{alg:SVI_LDA_exact}
+\begin{algorithmic}[1]
+
+\State Initialize $\lambda^{(0)}$ randomly.
+\State Set the step-size schedule $\rho_t$ appropriately.
+\Repeat
+    \State Sample a document $w_d$ uniformly from the data set.
+    \State Initialize $\gamma_{dk} = 1,$ for $k \in \{1,\ldots,K\}$.
+    \Repeat
+        \For{$n \in \{1,\ldots,N\}$}
+            \State $\phi_{dn}^k \propto \exp\{\mathbb{E}[\log\theta_{dk}] + \mathbb{E}[\log\beta_{k,w_{dn}}]\}, \quad k \in \{1,\ldots,K\}$.             
+            \Comment{$q(Z)$ update}
+        \EndFor
+        \State $\gamma_d = \alpha + \sum_{n} \phi_{dn}$.
+        \Comment{$q(\theta)$ update}
+    \Until local parameters $\phi_{dn}$ and $\gamma_d$ converge.
+    \For{$k \in \{1,\ldots,K\}$}
+        \State $\hat{\lambda}_k = \eta + D \sum_{n=1}^{N} \phi_{dn}^k w_{dn}$.
+        \Comment{$q(\beta)$ update}
+    \EndFor
+    \State $\lambda^{(t)} = (1 - \rho_t)\lambda^{(t-1)} + \rho_t\hat{\lambda}$.
+\Until forever
+
+\end{algorithmic}
+\end{algorithm}
+
+\subsubsection*{Code}
+The code has been provided in the Appendix of this report.
+
+\subsubsection*{Comments and conclusions}
+As shown in the output graphs, the updates obtained with Stochastic Variational Inference reach higher ELBO values in fewer iterations compared to the CAVI updates. In other words, SVI appears to converge faster and more efficiently towards a better local optimum of the objective. This behaviour is not limited to a single experiment: in the assignment there were three different test cases, and in all of them we can clearly observe the same pattern. Although the exact ELBO trajectories differ slightly from case to case, the qualitative result remains the same: SVI improves the ELBO more rapidly in the initial iterations and stabilises at values that are typically higher than those achieved by CAVI.
+
+\begin{center}
+    \includegraphics[width=0.45\textwidth]{fig/ELBO1.png}
+    \includegraphics[width=0.45\textwidth]{fig/ELBO2.png}
+\end{center}
+
 \section*{2.3 \quad BBVI}
 \subsection*{Question 2.3.8}
 We know that:
@@ -203,69 +361,47 @@ Where:
 \subsection*{Question 2.3.9}
 In the BBVI (Black Box Variational Inference) paper, Control Variates are used to reduce the variance of the gradient estimators of the ELBO while keeping them unbiased.
 
-\section*{2.2 \quad SVI - LDA}
-\subsection*{Question 2.2.5}
+\section*{2.4 \quad Variational Autoencoders}
+\subsection*{Question 5.1}
+We want to prove that the elbo can be rewritten as 
+$E_{q(z)}\big[\log p(x|z)\big] - D_{KL} \big( q(z) \lvert \rvert  p(z)\big)$
+\begin{align*}
+\mathcal{L} &= \mathbb{E}_{q(z)} \left[ \log \frac{p(x,z)}{q(z)} \right] = \int q(z) \cdot \log \frac{p(x,z)}{q(z)} \, dz \\
+%
+&= \int q(z) \cdot \log \frac{p(x|z) p(z)}{q(z)} \, dz \\
+%
+&= \int q(z) \cdot \log p(x|z) \, dz + \int q(z) \log \frac{p(z)}{q(z)} \, dz \\
+%
+&= \int q(z) \cdot \log p(x|z) \, dz - \int q(z) \log \frac{q(z)}{p(z)} \, dz \\
+%
+&= \mathbb{E}_{q(z)} \left[ \log p(x|z) \right] - D_{KL} \left( q(z) \| p(z) \right)
+\end{align*}
 
-Given the model described in the Hoffman paper, let us define \(x_n\) as the \(n\)-th observation, \(z_n\) as the \(n\)-th local hidden variable, \(\beta\) as the global hidden variables, and \(\alpha\) as the fixed hyperparameters. According to this notation and the corresponding graphical model, the joint distribution can be written as
-\begin{equation}
-    p(X, Z, \beta \mid \alpha)
-    = p(\beta \mid \alpha)\,
-      \prod_{n=1}^{N} \textcolor{blue}{p(x_n, z_n \mid \beta)}.
-\end{equation}
+\subsection*{Question 5.2}
+Kullback–Leibler divergence can be computed using the closed-form analytic expression when both the variational and the prior distributions are Gaussian.
+We write down this KL divergence in terms of the parameters of the prior and the variational distributions by considering a generic case where the latent space is K-dimensional.
+\begin{align*}
+    - D_\text{KL}(q_\phi(z | x) || p_\theta (z)) &= \int q_\theta(z) \left( \log p_\theta(z) - \log q_\theta(z)\right) dz \\
+    &= \int  q_\theta(z) \left( \log p_\theta(z) \right) dz + \int q_\theta(z) \left( \log q_\theta(z) \right) dz \\
+    &= \int \mathcal{N}(z; \mu , \sigma^2) \log \mathcal{N}(z; 0 , I) dz + \int \mathcal{N}(z; \mu , \sigma^2) \log \mathcal{N}(z; \mu , \sigma^2) dz \\
+    &= -\frac{K}{2} \log(2\pi) - \frac{1}{2} \sum_{k=1}^{K}(\mu_k^2 + \sigma_k^2) - \frac{K}{2} \log(2\pi) - \frac{1}{2} \sum_{k=1}^{K}(1+\log \sigma_k^2) \\
+    &= \dfrac{1}{2} \sum^K_{k = 1} \left[ 1 +\log(\sigma_k^2) - \mu_k^2 - \sigma_k^2 \right]
+\end{align*}
 
-The equality 
-\begin{equation*}
-    p(x_n, z_n \mid x_{-n}, z_{-n}, \beta)
-    = \textcolor{blue}{p(x_n, z_n \mid \beta)}.
-\end{equation*}
-holds because of the fork structure in the graphical model: given the global variables \(\beta\), each pair \((x_n, z_n)\) is conditionally independent of all other pairs \((x_{-n}, z_{-n})\), therefore it is dependent on the global variables only.
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.3\linewidth]{fig/1.jpeg}
-    \caption{V structure in the given model}
-    \label{fig:V_structure}
-\end{figure}
-
-The global variables \(\beta\) are parameters equipped with a prior distribution \(p(\beta)\), while each local variable \(z_n\) contains the latent structure associated with the \(n\)-th observation.
-
-The variables \(z_n\) are called \emph{local} because each of them is tied solely to its corresponding observation \(x_n\) and does not interact with the other local hidden variables.
-
-\subsection*{Question 2.2.6}
-
-\subsection*{Question 2.2.7}
-
-For this question, we were asked to implement the SVI updates and the SVI algorithm for the LDA model. To do so, we followed the formulation of Latent Dirichlet Allocation given in Section 3.2 of Hoffman et al.
-
-\begin{algorithm}[h!]
-\caption{Stochastic Variational Inference for LDA}
-\label{alg:SVI_LDA_exact}
-\begin{algorithmic}[1]
-
-\State Initialize $\lambda^{(0)}$ randomly.
-\State Set the step-size schedule $\rho_t$ appropriately.
-\Repeat
-    \State Sample a document $w_d$ uniformly from the data set.
-    \State Initialize $\gamma_{dk} = 1,$ for $k \in \{1,\ldots,K\}$.
-    \Repeat
-        \For{$n \in \{1,\ldots,N\}$}
-            \State $\phi_{dn}^k \propto \exp\{\mathbb{E}[\log\theta_{dk}] + \mathbb{E}[\log\beta_{k,w_{dn}}]\}, \quad k \in \{1,\ldots,K\}$.
-        \EndFor
-        \State $\gamma_d = \alpha + \sum_{n} \phi_{dn}$.
-    \Until local parameters $\phi_{dn}$ and $\gamma_d$ converge.
-    \For{$k \in \{1,\ldots,K\}$}
-        \State $\hat{\lambda}_k = \eta + D \sum_{n=1}^{N} \phi_{dn}^k w_{dn}$.
-    \EndFor
-    \State $\lambda^{(t)} = (1 - \rho_t)\lambda^{(t-1)} + \rho_t\hat{\lambda}$.
-\Until forever
-
-\end{algorithmic}
-\end{algorithm}
-
-\paragraph{Update $q(Z)$}
-\paragraph{Update $q(\theta)$}
-\paragraph{Update $q(\beta)$}
-
-
+\subsection*{Question 5.3}
+To compute the ELBO, we note that the KL divergence component was already derived in the previous question. We now proceed to compute the remaining expectation term \(E_{q(z)}[\log p(x|z)]\), as shown below.
+\[
+E_{q(z)}[\log p(x|z)] = \int q(z|x) \log p(x|z) dz 
+\]
+\begin{align*}
+&\underset{\substack{\uparrow \\ \text{MONTE} \\ \text{CARLO} \\ \text{SAMPLES}}}{\approx} \log p(x|z_{1}) \quad \text{WHERE } z_{1} \sim q(z|x) \\
+\\
+P(x|z_{1}) &= \text{Bernoulli}(g(z_{1})) =  \prod_{i=1}^{D} (1-g(z_{1})_i)^{1-x_i} \cdot g(z_{1})_i^{x_i} \\
+\\
+\log p(x|z_{1}) &= \sum_{i=1}^{D} (1-x_i) \log(1-g(z_{1})_i) + x_i \log(g(z_{1})_i) \\
+\\
+E_{q(z)}[\log p(x|z)] \approx \log p(x|z_{1}) &= \sum_{i=1}^{D} (1-x_i) \log(1-g(z_{1})_i) + x_i \log(g(z_{1})_i) \\
+\end{align*}
+We assumed only one monte carlo sampling \( L=1 \) as suggested by the TA
 
 \end{document}
