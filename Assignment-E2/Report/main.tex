@@ -167,6 +167,41 @@ We need just to replace each component inside the definition of exponential fami
 = & \frac{1}{x\sqrt{2\pi\sigma^2}} e^{-\frac{(\log x - \mu)^2}{2\sigma^2}} \sim \text{ logNormal }(\mu, \sigma^2)
 \end{align*}
 
+\section*{2.3 \quad BBVI}
+\subsection*{Question 2.3.8}
+We know that:
+\[
+P(X_n | \lambda ) \sim \text{Poisson}(\lambda)
+\qquad
+P(\lambda) \sim \text{Gamma}(\alpha,\beta)
+\]
+\[
+z_s \sim q(\lambda) = \text{Exponential}(\theta) 
+\]
+\[
+p(x, \lambda) = p(\lambda) \cdot \prod_{n=1}^{N}p(x_n | \lambda ) = \left( \frac{\beta^\alpha}{\Gamma(\alpha)} \lambda^{\alpha - 1} e^{-\beta \lambda} \right) \cdot \prod_{n=1}^{N} \left( \frac{\lambda^{x_n} e^{-\lambda}}{x_n!} \right)
+\]
+\[
+q(\lambda | \theta ) = \theta e^{-\theta \cdot \lambda}
+\]
+We want to write an expression for the Naive BBVI gradient estimate w.r.t \(\theta\) , starting from its general definition ( considering the paper notation , we apply the following changes \(z = \lambda\) and \( \lambda = \theta\) )
+\[
+\nabla_\theta\mathcal{L} =  \E_{q(\lambda|\theta)}[ \nabla_\theta \log q(\lambda | \theta) \left( \log p(x, \lambda) - \log q(\lambda | \theta) \right)]
+\]
+We compute noisy unbiased gradients of the ELBO with Monte Carlo samples from the variational distribution
+\[
+\nabla_\theta\mathcal{L} \approx \frac{1}{S} \sum_{s=1}^{S} \nabla_\theta \log q(\lambda_s | \theta) \left( \log p(x, \lambda_s) - \log q(\lambda_s | \theta) \right)
+\]
+with \( \lambda_s \sim q(\lambda | \theta)\)
+Where:
+\begin{itemize}
+\item \(\log q(\lambda_s | \theta ) =  \log \theta - \theta \lambda_s\)
+\item \(\nabla_\theta \log q(\lambda_s | \theta ) = \frac{1}{\theta} - \lambda_s\)
+\item \( \log p( x, \lambda_s) =  \log \frac{\beta^\alpha}{\Gamma(\alpha)} + (\alpha-1)\log \lambda_s -\beta \lambda_s + \sum_{n=1}^{N} \left( x_n \log \lambda_s - \lambda_s - \log x_n! \right) \)
+\end{itemize}
+
+\subsection*{Question 2.3.9}
+In the BBVI (Black Box Variational Inference) paper, Control Variates are used to reduce the variance of the gradient estimators of the ELBO while keeping them unbiased.
 
 \section*{2.2 \quad SVI - LDA}
 \subsection*{Question 2.2.5}
