@@ -325,6 +325,48 @@ As shown in the output graphs, the updates obtained with Stochastic Variational 
     \includegraphics[width=0.45\textwidth]{fig/ELBO2.png}
 \end{center}
 
+\begin{enumerate}
+  \item \textbf{Case 1}
+  \begin{itemize}
+    \item CAVI
+    \begin{itemize}
+      \item Time: 1.8242542743682861
+      \item ELBO: -3870.7342405585446
+    \end{itemize}
+    \item SVI
+    \begin{itemize}
+      \item Time: 1.039257526397705
+      \item ELBO: -3891.6839981049
+    \end{itemize}
+  \end{itemize}
+  \item \textbf{Case 2}
+  \begin{itemize}
+    \item CAVI
+    \begin{itemize}
+      \item Time: 44.35628151893616
+      \item ELBO: -107708.32353181142
+    \end{itemize}
+    \item SVI
+    \begin{itemize}
+      \item Time: 13.386124610900879
+      \item ELBO: -108187.47572933618
+    \end{itemize}
+  \end{itemize}
+  \item \textbf{Case 3}
+  \begin{itemize}
+    \item CAVI
+    \begin{itemize}
+      \item Time: 30.287392377853394
+      \item ELBO: -4586254.856859555
+    \end{itemize}
+    \item SVI
+    \begin{itemize}
+      \item Time: 13.861533403396606
+      \item ELBO: -5247038.334761584
+    \end{itemize}
+  \end{itemize}
+\end{enumerate}
+
 \section*{2.3 \quad BBVI}
 \subsection*{Question 2.3.8}
 We know that:
@@ -404,4 +446,36 @@ E_{q(z)}[\log p(x|z)] \approx \log p(x|z_{1}) &= \sum_{i=1}^{D} (1-x_i) \log(1-g
 \end{align*}
 We assumed only one monte carlo sampling \( L=1 \) as suggested by the TA
 
+\newpage
+\subsection*{Conclusions}
+
+\subsubsection*{ELBO over epochs}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\linewidth]{fig/ELBO_over_epochs_VAE.png}
+    \caption{ELBO over epochs}
+\end{figure}
+
+\begin{description}
+  \item[Final ELBO value]: -84.6530
+\end{description}
+
+\subsubsection*{Examples of test images comparison}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{fig/reconstruction_of_the_images.png}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{fig/reconstruction_2.png}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{fig/reconstruction_3.png}
+\end{figure}
+
+\section*{Appendix}
 \end{document}
