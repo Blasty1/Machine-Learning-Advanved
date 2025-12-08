@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1765126611.08213 "/Users/brunobryan/Desktop/Programmazione/Machine-Learning-Advanved/Assignment-E2/Report/main.tex" "main.pdf" "main" 1765126612.28207 0
-  "/Users/brunobryan/Desktop/Programmazione/Machine-Learning-Advanved/Assignment-E2/Report/main.tex" 1765126612.06918 17971 d6711c3eda1dab66760749e14fc5739b ""
+["pdflatex"] 1765183547.42467 "/Users/brunobryan/Desktop/Programmazione/Machine-Learning-Advanved/Assignment-E2/Report/main.tex" "main.pdf" "main" 1765183548.71281 0
+  "/Users/brunobryan/Desktop/Programmazione/Machine-Learning-Advanved/Assignment-E2/Report/main.tex" 1765183545.64949 19664 48347496c96499914e0c5e50a5914647 ""
   "/Users/brunobryan/Library/texlive/2025basic/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1095.600pk" 1763892558.45586 12644 0e6dc0bccb8d8754be58f4023273319f ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/tfm/jknappen/ec/tcrm1095.tfm" 1136768653 1536 02c06700a42be0f5a28664c7273f82e7 ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
@@ -93,13 +93,17 @@
   "fig/2.jpeg" 1765126463.62681 56749 fa1d7d7f2b8aea93f18de09bf8023d63 ""
   "fig/ELBO1.png" 1765126463.6285 20011 5ea5416028618b869c7ff48cc82edaf3 ""
   "fig/ELBO2.png" 1765126463.62932 22358 0e03d6dea98c51172e046b04ef4b6bd1 ""
+  "fig/ELBO_over_epochs_VAE.png" 1765127121.61786 19541 cc24552737aa5e8d7481b8562596c6dc ""
   "fig/Map1.jpeg" 1765126463.63272 259402 2cd43c99ea06d1ffec730cae9aa8ffb3 ""
   "fig/Map2.jpeg" 1765126463.63524 238806 270467c180922bb330f89144ee3b01f0 ""
   "fig/T1.jpeg" 1765126463.64016 164214 1b7a3290e1950c40cde9fb34427d0365 ""
   "fig/T2.jpeg" 1765126463.64531 179477 89a5aced2b1e66c64ef772c23fb58c8e ""
   "fig/T3.jpeg" 1765126463.65318 148749 0073cb90f09e4bbb49f3eb75e11d3492 ""
-  "main.aux" 1765126612.17444 1009 012a8e56851c0d749d29a5899f4ef442 "pdflatex"
-  "main.tex" 1765126612.06918 17971 d6711c3eda1dab66760749e14fc5739b ""
+  "fig/reconstruction_2.png" 1765183511.46225 9543 348bc04842ee274c76e43fd665661953 ""
+  "fig/reconstruction_3.png" 1765183511.46264 9598 f0e03074060132b6469af1ccb0f712ea ""
+  "fig/reconstruction_of_the_images.png" 1765127144.52299 8385 3a40e76f81ee8514e46162151cd271b4 ""
+  "main.aux" 1765183548.61732 1129 664f56c050a3838e1d7172b9738b2403 "pdflatex"
+  "main.tex" 1765183545.64949 19664 48347496c96499914e0c5e50a5914647 ""
   (generated)
   "main.aux"
   "main.log"

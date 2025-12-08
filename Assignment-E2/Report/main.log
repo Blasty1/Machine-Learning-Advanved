@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.11.21)  7 DEC 2025 17:56
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.11.21)  8 DEC 2025 09:45
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -414,25 +414,53 @@ Package pdftex.def Info: fig/ELBO2.png  used on input line 325.
 
 [9]
 
-[10] (./main.aux)
+[10]
+
+[11]
+<fig/ELBO_over_epochs_VAE.png, id=68, 421.3341pt x 327.3831pt>
+File: fig/ELBO_over_epochs_VAE.png Graphic file (type png)
+<use fig/ELBO_over_epochs_VAE.png>
+Package pdftex.def Info: fig/ELBO_over_epochs_VAE.png  used on input line 456.
+(pdftex.def)             Requested size: 334.60571pt x 260.00356pt.
+<fig/reconstruction_of_the_images.png, id=69, 461.8053pt x 232.7094pt>
+File: fig/reconstruction_of_the_images.png Graphic file (type png)
+<use fig/reconstruction_of_the_images.png>
+Package pdftex.def Info: fig/reconstruction_of_the_images.png  used on input line 467.
+(pdftex.def)             Requested size: 209.12778pt x 105.38226pt.
+<fig/reconstruction_2.png, id=70, 461.8053pt x 232.7094pt>
+File: fig/reconstruction_2.png Graphic file (type png)
+<use fig/reconstruction_2.png>
+Package pdftex.def Info: fig/reconstruction_2.png  used on input line 472.
+(pdftex.def)             Requested size: 209.12778pt x 105.38226pt.
+
+
+[12 <./fig/ELBO_over_epochs_VAE.png> <./fig/reconstruction_of_the_images.png>]
+<fig/reconstruction_3.png, id=76, 461.8053pt x 232.7094pt>
+File: fig/reconstruction_3.png Graphic file (type png)
+<use fig/reconstruction_3.png>
+Package pdftex.def Info: fig/reconstruction_3.png  used on input line 477.
+(pdftex.def)             Requested size: 209.12778pt x 105.38226pt.
+
+
+[13 <./fig/reconstruction_2.png> <./fig/reconstruction_3.png>] (./main.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2020/03/25>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 6971 strings out of 474662
- 136040 string characters out of 5751108
+ 7002 strings out of 474662
+ 137092 string characters out of 5751108
  682475 words of memory out of 5000000
- 29944 multiletter control sequences out of 15000+600000
+ 29975 multiletter control sequences out of 15000+600000
  569028 words of font info for 75 fonts, out of 8000000 for 9000
  319 hyphenation exceptions out of 8191
  108i,17n,107p,10987b,297s stack positions out of 10000i,1000n,20000p,200000b,200000s
  </Users/brunobryan/Library/texlive/2025basic/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1095.600pk></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex8.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on main.pdf (10 pages, 1552670 bytes).
+Output written on main.pdf (13 pages, 1594217 bytes).
 PDF statistics:
- 144 PDF objects out of 1000 (max. 8388607)
- 83 compressed objects within 1 object stream
+ 162 PDF objects out of 1000 (max. 8388607)
+ 90 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 46 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 66 words of extra memory for PDF output out of 10000 (max. 10000000)
 
