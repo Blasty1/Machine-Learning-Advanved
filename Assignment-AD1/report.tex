@@ -7,10 +7,39 @@
 \usepackage{listings}
 
 
-\newcommand{\elbo}{\mathcal{L}}
-\newcommand{\E}{\mathbb{E}}
-\newcommand{\p}{\mathbb{P}}
-\newcommand{\q}{q}
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    commentstyle=\color{green!50!black},
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny,
+    breaklines=true,
+    showstringspaces=false,
+    frame=single,
+    backgroundcolor=\color{gray!10},
+    literate=
+        {τ}{{$\tau$}}1
+        {σ}{{$\sigma$}}1
+        {²}{{$^2$}}1
+        {θ}{{$\theta$}}1
+        {α}{{$\alpha$}}1
+        {β}{{$\beta$}}1
+        {λ}{{$\lambda$}}1
+        {∇}{{$\nabla$}}1
+        {≈}{{$\approx$}}1
+        {Σ}{{$\Sigma$}}1
+        {μ}{{$\mu$}}1
+        {π}{{$\pi$}}1
+        {ε}{{$\varepsilon$}}1
+        {∈}{{$\in$}}1
+        {≤}{{$\leq$}}1
+        {≥}{{$\geq$}}1
+        {×}{{$\times$}}1
+        {∂}{{$\partial$}}1
+        {∞}{{$\infty$}}1
+}
 
 \title{Assignment 1AD, 2025}
 \subtitle{DD2434 Machine Learning, Advanced Course}
@@ -96,4 +125,367 @@ Maxiziming the ELBO wrt a single variational factor $q(z_j)$ is equivalent to mi
 \log \tilde{p}(x,z_j) = \log q(z_j)* = E_{\prod_{l \ne j} q(z_l)}[\log p(x,z)]
 \]
 In this case $j=1$
+
+\subsection*{D.3}
+We will analyze the model with Normal-likelihood and NormalGamma prior of 1E.3. instead of using the Coordinate Ascent Variational Inference (CAVI) algorithm, we will employ Black-Box Variational Inference (BBVI). This BBVI will utilize the REINFORCE gradient estimator (in its basic, high-variance form) to infer the variational distributions $q(\mu)$ and $q(\tau)$ under the mean-field assumption $q(\mu, \tau) = q(\mu) q(\tau)$
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\linewidth]{imgs/D3-Normal-NormalGamma-model.png}
+    \caption{Bayesian network of the Normal-NormalGamma model}
+    \label{fig:Normal-NormalGammaModel}
+\end{figure}
+\subsubsection*{Question 1.2.4}
+We provide the final expressisions for
+\begin{itemize}
+    \item Log Likelihood $\log P(D | \mu , \tau )$
+\begin{align*}
+    \log P(D | \mu , \tau ) &= \log \left(\prod_{n=1}^N f_{\tau,\mu}(x_n) \right)\\
+    &= \sum_{n=1}^{N} \log \left( \sqrt{\frac{\tau}{2 \pi}} e^{- \frac{\tau}{2} (x_n-\mu)^2} \right)\\
+    &= \sum_{n=1}^{N} \left[ 0.5 \log \tau -0.5 \log 2\pi - 0.5\tau (x_n - \mu)^2 \right]
+\end{align*}
+    \item Log Prior $\log P(\tau, \mu)$
+\begin{align*}
+    \log P(\tau, \mu) &= \log P(\tau) P(\mu | \tau)\\
+    &= \log \left[ \frac{\beta_0^{\alpha_0}}{\Gamma(\alpha_0)} \sqrt{\frac{\lambda_0 \tau}{2\pi}} \tau^{\alpha_0 - 1} e^{-\beta_0 \tau} e^{-\frac{\lambda_0 \tau}{2} (\mu - \mu_0)^2} \right]\\
+    &= \alpha_0 \log \beta_0 - \log \Gamma(\alpha_0) + 0.5 \log \lambda_0 \tau - 0.5 \log 2\pi + (\alpha_0 -1) \log \tau - \beta_0 \tau -\frac{\lambda_0 \tau}{2} (\mu - \mu_0)^2
+\end{align*}
+    \item Log Variational Distribution $q(z[s] | \lambda )$
+\[
+    \log q(\mu, \tau | \mu_N , \lambda_N, \alpha_N , \beta_N) = \log q(\mu | \mu_N, \lambda_N) + \log q(\tau | \alpha_N , \beta_N)
+\]
+Knowing that $q(\tau) \sim \text{Gamma}(\alpha_N, \beta_N)$ and $q(\mu) \sim \text{Normal}(\mu_N, \lambda_N^{-1})$
+\[
+    \left[ 0.5 \log \frac{\lambda_N}{2 \pi}  - \frac{\lambda_N (\mu - \mu_N)^2}{2}\right]
+    +
+    \left[ \alpha_N \log \beta_N +(\alpha_N -1)\log \tau -\log \Gamma(\alpha_N) - \beta_N \tau  \right]
+\]
+    \item Score function $\nabla_\lambda \log q(z[s] | \lambda)$
+\[
+    \nabla_{\mu_N , \lambda_N, \alpha_N , \beta_N} \log q(\mu, \tau | \mu_N , \lambda_N, \alpha_N , \beta_N) = \nabla_{\mu_N , \lambda_N} \log q(\mu | \mu_N , \lambda_N) + \nabla_{\alpha_N , \beta_N} \log q( \tau |\alpha_N , \beta_N)
+\]
+We compute each term individually
+    \begin{itemize}
+        \item $\nabla_{\mu_N , \lambda_N} \log q(\mu | \mu_N , \lambda_N)$
+        \begin{itemize}
+            \item $\nabla_{\mu_N} \log q(\mu | \mu_N , \lambda_N) = \lambda_N(\mu-\mu_N)$
+            \item $\nabla_{\lambda_N} \log q(\mu | \mu_N , \lambda_N) = +0.5 \frac{\frac{1}{2\pi}}{\frac{\lambda_N}{2\pi}} - 0.5 (\mu-\mu_N)^2 = \frac{1}{2 \lambda_N} - \frac{(\mu-\mu_N)^2}{2}$
+        \end{itemize}    
+        \item $\nabla_{\alpha_N , \beta_N} \log q( \tau |\alpha_N , \beta_N)$
+        \begin{itemize}
+            \item $\nabla_{\alpha_N} \log q( \tau |\alpha_N , \beta_N) = \log \beta_N + \log \tau - \psi(\lambda_N)$ , where  $\psi(x) = \frac{d \ln \Gamma(x)}{dx}$
+            \item $\nabla_{\beta_N} \log q( \tau |\alpha_N , \beta_N) = \frac{\alpha_N}{\beta_N} - \tau$
+        \end{itemize}
+    \end{itemize}
+\item $\log P(D, z[s]) = \log P(D, \mu_s , \tau_s) = \log P(D | \mu_s, \tau_s) + \log P(\mu_s , \tau_s)$
+\end{itemize}
+
+\subsubsection*{Question 1.2.5}
+We implemented algorithm 1 of the BBVI paper using Pytorch\\
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.45\linewidth]{imgs/D3-AlgorithmBBVI.png}
+\end{figure}
+Generation of dataset
+\begin{lstlisting}
+def generate_data(mu, tau, N):
+  x = torch.linspace(-10, 10, N)
+  # Insert your code here
+  sigma = 1 / torch.sqrt(torch.tensor(tau))   # precision τ = 1/σ²
+  torch.manual_seed(10)
+  
+  D = torch.normal(mu, sigma, size=(N,))
+
+  return D
+
+mu = 1
+tau = 0.5
+
+dataset = generate_data(mu, tau, 100)
+\end{lstlisting}
+\newpage
+Black Box Algorithm 1 implementation
+\begin{lstlisting}
+ class BlackBoxVI:
+    """Black Box Variational Inference implementation."""
+    
+    def __init__(self, D, log_joint_distribution, variational_family_q,S=10, learning_rate=1e-3):
+        """
+        Black Box Variational Inference implementation without any .
+            Args:
+                D: dataset
+                log_joint_distribution: function that computes the log joint distribution
+                variational_family_q: variational family q with parameters to optimize
+                S: number of samples for Monte Carlo estimation
+                learning_rate: learning rate for the optimizer
+        """
+        self.D = D
+        self.log_joint_distribution = log_joint_distribution
+        self.variational_family_q = variational_family_q
+        self.S = S
+        self.learning_rate = learning_rate
+
+    
+    def fit(self, max_iterations = 1000):
+        """Fit the variational parameters using BBVI algorithm.
+        SGD optimization
+        Args:
+            threshold: convergence threshold
+            max_iterations: maximum number of iterations
+        """
+        history = {
+            "elbo" : [],
+            "final_params" : None,
+            'mu_expected': [],
+            'tau_expected': [],
+        }
+        lr_sgd = self.learning_rate      # A small learning rate
+        optimizer_sgd = optim.SGD([self.variational_family_q.parameters], lr=lr_sgd)
+       
+        for t in range(1,max_iterations+1):
+            elbo=0
+            loss=0
+            optimizer_sgd.zero_grad()
+            for s in range(self.S):
+                z_s = self.variational_family_q.sample()
+
+                #compute log(q(z[s]))
+                log_q_z_s = self.variational_family_q.log_prob(z_s)
+                
+                # Compute log p(x, z[s])
+                log_p_z_s_D = self.log_joint_distribution(self.D, z_s)
+                
+                # Compute the score function ∇_λ log q(z[s]; λ)
+                learning_signal = (log_p_z_s_D - log_q_z_s).detach()
+                
+                #loss
+                elbo += learning_signal
+                loss += (- log_q_z_s * learning_signal)
+            
+            elbo /= self.S
+            loss /= self.S
+         
+            loss.backward()
+            optimizer_sgd.step()
+            
+            
+            #we compute the elb and we check the params every 10 iterations and at the first iteration
+            if t % 10 == 0 or t == 1:
+                mu_N,lambda_N, alpha_N,beta_N = self.variational_family_q.get_actual_parameters()
+                history["elbo"].append((t,elbo))
+                history['mu_expected'].append((t,mu_N.item()))
+                history['tau_expected'].append((t,(alpha_N / beta_N).item()))
+            
+        history['final_params'] = self.variational_family_q.get_parameters()
+        
+        return history
+\end{lstlisting}
+The optimization loop performs these steps at each iteration:
+\begin{itemize}
+    \item Sample latent variables $\rightarrow$ Draw $S$ samples $z[s]$ from the current variational distribution $q(z; \lambda)$
+    \item Evaluate probabilities  $\rightarrow$ For each sample, we compute log $q(z[s]; \lambda)$ and log $p(D, z[s])$
+    \item Compute learning signal $\rightarrow$ Calculate $f[s] = \log p(D, z[s]) - \log q(z[s])$, which represents how much better sample $z[s]$ explains the data compared to the variational approximation
+    \item Calculate gradient $\rightarrow$  Use the score function estimator
+    \item Update parameters $\rightarrow$  Use SGD to update $\lambda$ based on the averaged gradient
+\end{itemize}
+
+
+\begin{lstlisting}
+
+class NormalGammaVariationalFamily():
+    
+    """Variational family for Normal-NormalGamma conjugate model.
+    
+        Variational distribution: q(μ, τ | λ) = q(μ | τ) q(τ)
+        where:
+            - μ | τ ~ Normal(μ_N, (λ_N * τ)^(-1))
+            - τ ~ Gamma(α_N, β_N)
+        
+     Parameters: λ = [μ_N, λ_N, α_N, β_N]
+    """
+    def __init__(self):
+        """Initialize with dimension of latent variable.""" 
+        mu_N = torch.randn(1).item()
+        lambda_N = torch.rand(1).item() * 2 + 0.5
+        alpha_N = torch.rand(1).item() * 3 + 1.0
+        beta_N = torch.rand(1).item() * 3 + 0.5
+        
+        self.parameters = torch.tensor([
+            mu_N, torch.log(torch.tensor(lambda_N)), torch.log(torch.tensor(alpha_N)), torch.log(torch.tensor(beta_N))
+        ], requires_grad=True)
+        
+    def get_actual_parameters(self):
+        mu_N = self.parameters[0]
+        
+        lambda_N = torch.exp(self.parameters[1])
+        alpha_N = torch.exp(self.parameters[2])
+        beta_N = torch.exp(self.parameters[3])
+        
+        return mu_N, lambda_N, alpha_N, beta_N
+
+    def get_parameters(self):
+        return self.parameters.clone()
+    
+    def set_parameters(self,new_params):
+        self.parameters = new_params.clone()
+    
+
+    def sample(self):
+        """Sample from the variational distribution.
+            z[s] ~ q(μ, τ | λ)
+        """
+       
+        mu_N, lambda_N, alpha_N, beta_N = self.get_actual_parameters()
+
+        tau = torch.distributions.Gamma(alpha_N, beta_N).sample()
+        
+        
+        precision = lambda_N * tau
+        
+        sigma_mu = 1.0 / torch.sqrt(precision)
+        
+        mu = torch.distributions.Normal(mu_N, sigma_mu).sample()
+        
+        return (mu,tau)
+    
+    def log_prob(self, z):
+        """Compute log probability of z under the variational distribution.
+            Compute log q(μ, τ | λ).
+         """
+        mu, tau = z
+        mu_N, lambda_N, alpha_N, beta_N = self.get_actual_parameters()
+
+        
+        log_q_tau = torch.distributions.Gamma(alpha_N, beta_N).log_prob(tau)
+        
+        
+        precision = lambda_N * tau
+        
+        sigma_mu = 1.0 / torch.sqrt(precision)
+        
+        log_q_mu_given_tau = torch.distributions.Normal(mu_N,sigma_mu).log_prob(mu)
+
+        return log_q_tau + log_q_mu_given_tau      
+\end{lstlisting}
+We store the logarithms of parametes to enforce the necessary constraint that these parameters must remain strictly positive during optimization, thereby allowing the optimization algorithm to operate effectively over the entire unconstrained range of real numbers.
+
+\begin{lstlisting}
+def log_joint_distribution(D, z):
+        """Compute the log joint distribution log p(D, Z).
+        Args:
+            D: dataset
+            Z: latent variables
+        Returns:
+            log p(D, Z)
+        """
+        # log p(D, Z) = log p(D|Z) + log p(Z)
+        # Z = (mu, tau)
+        
+        mu, tau = z
+        sigma = 1 / torch.sqrt(tau)
+        
+        mu_0 = 1.0
+        lambda_0 = 0.1 
+        a_0 = 1.0
+        b_0 = 2.0  
+        
+        #log P(D|Z)
+        log_likelihood = torch.distributions.Normal(mu, sigma).log_prob(D).sum()
+        
+        #log P(mu , tau) = log P(mu | tau) + log P(tau)
+        
+        # Log prior p(μ | τ)
+        precision_mu = lambda_0 * tau
+        sigma_mu = 1.0 / torch.sqrt(precision_mu)
+        log_prior_mu = torch.distributions.Normal(mu_0, sigma_mu).log_prob(mu)
+        
+        # Log prior p(τ)
+        log_prior_tau = torch.distributions.Gamma(a_0, b_0).log_prob(tau)
+        
+        
+        return log_likelihood + log_prior_mu + log_prior_tau
+\end{lstlisting}
+The initial parameters have been taken from the last assignments ( $\mu_0 , \lambda_0 , \alpha_0, \beta_0)$\\
+Application of the model
+\begin{lstlisting}
+q = NormalGammaVariationalFamily()
+
+bbvi = BlackBoxVI(dataset,log_joint_distribution=log_joint_distribution,S = 30,variational_family_q=q,learning_rate=1e-5)
+results = bbvi.fit(max_iterations=10**4)
+
+print(results['mu_expected'][-1])
+print(f"\n{'='*60}")
+print(f"Final Results:")
+print(f"E_q[μ] = {results['mu_expected'][-1][1]:.4f} (true: {mu})")
+print(f"E_q[τ] = {results['tau_expected'][-1][1]:.4f} (true: {tau})")
+print(f"Data mean: {dataset.mean():.4f}")
+print(f"Data precision: {1.0/dataset.var():.4f}")
+print(f"{'='*60}")
+
+### Plot of the ELBO
+plt.figure(figsize=(14, 6))
+iterations, elbos = zip(*results["elbo"])
+plt.plot(iterations,elbos,'b-')
+plt.xlabel("Iteration")
+plt.ylabel("Elbo")
+plt.title('ELBO over Iterations', fontsize=14)
+plt.grid(alpha=0.3)
+
+
+### Plot for m
+plt.figure(figsize=(14, 6))
+iterations, mu_expected = zip(*results["mu_expected"])
+plt.plot(iterations,mu_expected,'b-')
+plt.axhline(mu, color='r', linestyle='--', label="real value")
+plt.xlabel("Iteration")
+plt.ylabel("mu")
+plt.title('SGD: Convergence of Mean (m)', fontsize=14)
+plt.grid(alpha=0.3)
+
+
+
+
+### Plot for tau
+plt.figure(figsize=(14, 6))
+iterations, tau_expected = zip(*results["tau_expected"])
+plt.plot(iterations,tau_expected,'b-')
+plt.axhline(tau, color='r', linestyle='--', label="real value")
+plt.xlabel("Iteration")
+plt.ylabel("tau")
+plt.title('SGD: Convergence of Tau', fontsize=14)
+plt.grid(alpha=0.3)
+\end{lstlisting}
+\textbf{Conclusions}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\linewidth]{imgs/D3-ELBO.png}
+    \caption{Evidence Lower Bound (ELBO) over training iterations.}
+\end{figure}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\linewidth]{imgs/D3-MeanConvergence.png}
+    \caption{Convergence results for Tau parameter.}
+\end{figure}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\linewidth]{imgs/D3-TauConvergence.png}
+    \caption{Convergence results for the Tau parameter.}
+\end{figure}
+\begin{table}[h!]
+    \centering
+    \label{tab:final_results}
+    \begin{tabular}{|l|c|c|}
+        \hline
+        \textbf{Parameter} & \textbf{Variational Estimate ($E_q[\cdot]$)} & \textbf{True/Data Value} \\
+        \hline
+        Mean ($\mu$) & 0.8634 & 1.0000 \\
+        \hline
+        Precision ($\tau$) & 0.5255 & 0.5000 \\
+        \hline
+        Dataset Mean & N/A & 0.8901 \\
+        \hline
+        Dataset Precision & N/A & 0.4580 \\
+        \hline
+    \end{tabular}
+    \caption{Data Statistics}
+\end{table}
 \end{document}
