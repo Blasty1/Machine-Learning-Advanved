@@ -22,5 +22,78 @@ Bruno Carchia \\
 \begin{document}
 \maketitle
 
+\section*{D Section}
+\subsection*{D.1}
+\subsubsection*{Question 1.1.1}
+Starting from the definition of the KL divergence $\text{KL}(q(Z) || p(Z|X) )$ , we want to rewrite it and identify the quantity referred as the Evidence Lower Bound ( ELBO ).
 
+\begin{align*}
+\text{KL}(q(z) || p(z|x)) &= E_q \left[\log \frac{q(z)}{p(z|x)}\right] \\
+&= \int q(z) \log \frac{q(z)}{p(z|x)} dz\\
+&= \int q(z) \log \frac{q(z)}{\frac{p(z,x)}{p(x)}} dz\\
+&= \int q(z) \log \frac{q(z)}{p(z,x)} dz + \int q(z) \log p(x) dz\\
+&= E_q \left[ \log \frac{q(z)}{p(z,x)} \right] + \log p(x)
+\end{align*}
+Knowing that the ELBO is defined as $\mathcal{L} = \text{KL}(p(x,z) | q(z))$
+\[
+\text{KL}(q(z) || p(z|x)) = - \mathcal{L} + \log p(x)
+\]
+\[
+\log p(x) = \mathcal{L} + \text{KL}(q(z) || p(z|x))
+\]
+The ELBO is a lower bound because the KL divergence is always non-negative. Maximizing the ELBO effectively maximizes the lower bound on $\log p(x)$ and minimizes the KL divergence.
+
+\subsubsection*{Question 1.1.2}
+\begin{itemize}
+    \item A more expressive variational family can better approximate the true posterior, reducing $\text{KL}(q(z) || p(z|x))$ and increasing the ELBO ( a fully factorized mean field distribution produces a looser ELBO because it ignores dependencies between latent variables)
+    \item A more expressive variational family can capture closely dependencies between latent variables, yielding $q(z)$ closer to the true posteriori $p(z|x)$ ( a fully factorized mean field distribution produces a less accurate posterior approximation )
+\end{itemize}
+
+\subsection*{D.2}
+\subsubsection*{Question 1.1.3}
+Considering a mean field assumption on our variation distribution $q(Z_1,Z_2,Z_3) = q(Z_1)q(Z_2)q(Z_3)$, we want to prove that $\log q_1^*(Z_1) = E_{-Z_1}\left[ \log p(X,Z) \right]$
+\begin{align*}
+    \mathcal{L} &= \int \prod_{i}^{3} q(z_i) \log \left( \frac{p(x,z)}{\prod_{l}^{3} q(z_l)} \right) dz\\
+    &= \int \prod_{i}^{3} q(z_i) \left[ \log \left( p(x,z) \right) - \sum_{l}^{3} \log q(z_l)  \right] dz\\
+    &= \int \prod_{i}^{3} q(z_i) \log  p(x,z) dz - \int \prod_{i}^{3} q(z_i) \sum_{l}^{3} \log q(z_l) dz
+\end{align*}
+We work individually on these two terms:
+\begin{itemize}
+    \item First term can be decomposed in an outer component that depends on $z_j$ and an the inner component that depends on all the other variables $z_{-j}$
+    \[
+    \int \prod_{i}^{3} q(z_i) \log  p(x,z) dz = \int_{z_j} q(z_j) \left[ \int_{z_{-j}} \prod_{i \ne j} q(z_i) \log p(x,z)  dz_{-j}\right] dz_j
+    \]
+    We define $\log \tilde{p}(x,z_j) = E_{\prod_{l \ne j} q(z_l)}[\log p(x,z)]$, the first term becomes
+    \[
+    \int_{z_j} q(z_j) \log \tilde{p}(x,z_j) dz_j
+    \]
+    \item Second term can be rewritten in the following way
+    \[
+    - \int \prod_{i}^{3} q(z_i) \sum_{l}^{3} \log q(z_l) dz = - \int_z  \sum_{l}^{3} \log q(z_l) \prod_{i}^{3} q(z_i) dz 
+    \]
+    After switching the sum and the integral, we can decompose the term in an outer (depends on all the variables excepting for $z_l$) and inner component ( depends just on $z_l$)
+    \begin{align*}
+    &= - \sum_{l}^{3} \int_z \log q(z_l) \prod_{i}^{3} q(z_i) dz\\
+    &= - \sum_l^3 \int_{z_{-l}} \prod_{i \ne l} q(z_i) \left[ \int_{z_{l}} q(z_l) \log q(z_l) dz_l \right] dz_{-l}\\
+    \end{align*}
+    The inner component does not depend on terms related to $z_{-l}$ , the external integral gives 1 and we got as final result
+    \begin{align*}
+    &= - \sum_l^3  \int_{z_{l}} q(z_l) \log q(z_l) dz_l 
+    \end{align*}
+\end{itemize}
+The ELBO is
+\[
+ \mathcal{L} =  \int_{z_j} q(z_j) \log \tilde{p}(x,z_j) dz_j - \sum_l^3  \int_{z_{l}} q(z_l) \log q(z_l) dz_l 
+\]
+But our objective is to maximize the ELBO by iteratively optimizing a single variational factor $q(z_j)$ while holding all other factors $q(z_{-j})$ constant. In other words we treat as constant all the terms that do not depend on ${z_j}$
+\begin{align*}
+\mathcal{L} &=  \int_{z_j} q(z_j) \log \tilde{p}(x,z_j) dz_j - \int_{z_{j}} q(z_j) \log q(z_j) dz_j + \text{const}\\
+&= E_q(z_j)\left[ \frac{\log \tilde{p}(x,z_j)}{q(z_j)} \right]\\
+&= - \text{KL}(\tilde{p}(x,z_j) || q(z_j))
+\end{align*}
+Maxiziming the ELBO wrt a single variational factor $q(z_j)$ is equivalent to minimizing $\text{KL}(\tilde{p}(x,z_j) || q(z_j))$: the minimum occurs when $q(z_j)* = \tilde{p}(x,z_j)$
+\[
+\log \tilde{p}(x,z_j) = \log q(z_j)* = E_{\prod_{l \ne j} q(z_l)}[\log p(x,z)]
+\]
+In this case $j=1$
 \end{document}

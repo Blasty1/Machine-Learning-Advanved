@@ -1,10 +1,10 @@
 Work assignment:
 - Assignment D
     - 1.D.1
-        - 1.1.1 ✅
-        - 1.1.2 ✅
+        - 1.1.1 ☑️ ( check the difference between q(z | x ) and q(z), but should be correct. ) 
+        - 1.1.2 ☑️
     - 1.D.2
-        - 1.1.3 ✅ ( i have to rewrite the proof for the specific case )
+        - 1.1.3 ☑️
     - 1.D.3
         - 1.2.4 ✅
         - 1.2.5 ✅
