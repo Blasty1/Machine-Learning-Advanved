@@ -6,7 +6,7 @@ Work assignment:
     - 1.D.2
         - 1.1.3 ☑️
     - 1.D.3
-        - 1.2.4 ✅
+        - 1.2.4 ☑️
         - 1.2.5 ✅
     - 1.D.4 (skip)
         - 1.2.6
@@ -38,7 +38,7 @@ Work assignment:
         - 3.1.22 ✅
         - 3.1.23 ✅
         - 3.1.24 ✅
-        - 3.1.25 -> :todo
+        - 3.1.25 ✅ ( non sembra dare grandi miglioramenti, senmbra strano )
 - Assignment A
     - A.1
         - 4.1.26 ✅
