@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.11.21)  27 NOV 2025 17:01
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.11.21)  10 DEC 2025 12:19
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -244,36 +244,38 @@ File: lstmisc.sty 2024/09/23 1.10c (Carsten Heinz)
 File: listings.cfg 2024/09/23 1.10c listings configuration
 ))
 Package: listings 2024/09/23 1.10c (Carsten Heinz)
- (/usr/local/texlive/2025basic/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
+ (/usr/local/texlive/2025basic/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2024/09/23 1.10c listings language file
+) (/usr/local/texlive/2025basic/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2024-05-08 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count291
 \l__pdf_internal_box=\box58
 ) (./report.aux)
 \openout1 = `report.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-Package scrbase Info: activating english \abstractname on input line 22.
-Package scrbase Info: activating english \partname on input line 22.
-Package scrbase Info: activating english \figurename on input line 22.
-Package scrbase Info: activating english \tablename on input line 22.
-Package scrbase Info: activating english \contentsname on input line 22.
-Package scrbase Info: activating english \listfigurename on input line 22.
-Package scrbase Info: activating english \listtablename on input line 22.
-Package scrbase Info: activating english \refname on input line 22.
-Package scrbase Info: activating english \indexname on input line 22.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+Package scrbase Info: activating english \abstractname on input line 55.
+Package scrbase Info: activating english \partname on input line 55.
+Package scrbase Info: activating english \figurename on input line 55.
+Package scrbase Info: activating english \tablename on input line 55.
+Package scrbase Info: activating english \contentsname on input line 55.
+Package scrbase Info: activating english \listfigurename on input line 55.
+Package scrbase Info: activating english \listtablename on input line 55.
+Package scrbase Info: activating english \refname on input line 55.
+Package scrbase Info: activating english \indexname on input line 55.
  (/usr/local/texlive/2025basic/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count292
@@ -295,13 +297,13 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
 \c@lstlisting=\count298
 Package tocbasic Info: omitting babel extension for `lol'
-(tocbasic)             because of missing \bbl@set@language on input line 22.
+(tocbasic)             because of missing \bbl@set@language on input line 55.
 \scr@dte@lstlisting@maxnumwidth=\skip68
-LaTeX Font Info:    Trying to load font information for U+msa on input line 24.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 57.
  (/usr/local/texlive/2025basic/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 24.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 57.
  (/usr/local/texlive/2025basic/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
@@ -309,25 +311,184 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 [1
 
 
-{/usr/local/texlive/2025basic/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] (./report.aux)
+{/usr/local/texlive/2025basic/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+Overfull \hbox (47.36317pt too wide) in paragraph at lines 87--88
+\OT1/cmr/m/n/10.95 Considering a mean field as-sump-tion on our vari-a-tion dis-tri-bu-tion $\OML/cmm/m/it/10.95 q\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 Z[]; Z[]; Z[]\OT1/cmr/m/n/10.95 ) = \OML/cmm/m/it/10.95 q\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 Z[]\OT1/cmr/m/n/10.95 )\OML/cmm/m/it/10.95 q\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 Z[]\OT1/cmr/m/n/10.95 )\OML/cmm/m/it/10.95 q\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 Z[]\OT1/cmr/m/n/10.95 )$,
+ []
+
+
+
+[2]
+<imgs/D3-Normal-NormalGamma-model.png, id=24, 691.58376pt x 543.02875pt>
+File: imgs/D3-Normal-NormalGamma-model.png Graphic file (type png)
+<use imgs/D3-Normal-NormalGamma-model.png>
+Package pdftex.def Info: imgs/D3-Normal-NormalGamma-model.png  used on input line 137.
+(pdftex.def)             Requested size: 209.12778pt x 164.20248pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+
+[3]
+Overfull \hbox (74.43785pt too wide) detected at line 155
+[]
+ []
+
+
+Overfull \hbox (44.623pt too wide) detected at line 169
+\OMS/cmsy/m/n/10.95 r[] [] \OML/cmm/m/it/10.95 q\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 ^^V; ^^\\OMS/cmsy/m/n/10.95 j\OML/cmm/m/it/10.95 ^^V[]; ^^U[]; []; ^^L[]\OT1/cmr/m/n/10.95 ) = \OMS/cmsy/m/n/10.95 r[] [] \OML/cmm/m/it/10.95 q\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 ^^V\OMS/cmsy/m/n/10.95 j\OML/cmm/m/it/10.95 ^^V[]; ^^U[]\OT1/cmr/m/n/10.95 ) + \OMS/cmsy/m/n/10.95 r[] [] \OML/cmm/m/it/10.95 q\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 ^^\\OMS/cmsy/m/n/10.95 j\OML/cmm/m/it/10.95 []; ^^L[]\OT1/cmr/m/n/10.95 )
+ []
+
+
+
+[4 <./imgs/D3-Normal-NormalGamma-model.png>]
+<imgs/D3-AlgorithmBBVI.png, id=31, 375.4025pt x 287.0725pt>
+File: imgs/D3-AlgorithmBBVI.png Graphic file (type png)
+<use imgs/D3-AlgorithmBBVI.png>
+Package pdftex.def Info: imgs/D3-AlgorithmBBVI.png  used on input line 190.
+(pdftex.def)             Requested size: 188.21371pt x 143.93011pt.
+
+
+[5 <./imgs/D3-AlgorithmBBVI.png>]
+
+[6]
+
+[7]
+
+[8]
+
+[9]
+
+[10]
+<imgs/D3-ELBO.png, id=54, 847.0044pt x 396.0396pt>
+File: imgs/D3-ELBO.png Graphic file (type png)
+<use imgs/D3-ELBO.png>
+Package pdftex.def Info: imgs/D3-ELBO.png  used on input line 464.
+(pdftex.def)             Requested size: 292.7776pt x 136.89365pt.
+<imgs/D3-MeanConvergence.png, id=56, 835.4412pt x 396.0396pt>
+File: imgs/D3-MeanConvergence.png Graphic file (type png)
+<use imgs/D3-MeanConvergence.png>
+Package pdftex.def Info: imgs/D3-MeanConvergence.png  used on input line 469.
+(pdftex.def)             Requested size: 292.7776pt x 138.78513pt.
+<imgs/D3-TauConvergence.png, id=57, 835.4412pt x 396.0396pt>
+File: imgs/D3-TauConvergence.png Graphic file (type png)
+<use imgs/D3-TauConvergence.png>
+Package pdftex.def Info: imgs/D3-TauConvergence.png  used on input line 474.
+(pdftex.def)             Requested size: 292.7776pt x 138.78513pt.
+
+
+[11 <./imgs/D3-ELBO.png>]
+
+[12 <./imgs/D3-MeanConvergence.png> <./imgs/D3-TauConvergence.png>]
+
+[13]
+<imgs/C2-RaoBlackwellizedModel.png, id=72, 153.57375pt x 116.435pt>
+File: imgs/C2-RaoBlackwellizedModel.png Graphic file (type png)
+<use imgs/C2-RaoBlackwellizedModel.png>
+Package pdftex.def Info: imgs/C2-RaoBlackwellizedModel.png  used on input line 564.
+(pdftex.def)             Requested size: 167.29967pt x 126.84944pt.
+
+
+[14 <./imgs/C2-RaoBlackwellizedModel.png>]
+<imgs/C3-BBVIAlgorithm2.jpg, id=77, 902.37125pt x 1098.1025pt>
+File: imgs/C3-BBVIAlgorithm2.jpg Graphic file (type jpg)
+<use imgs/C3-BBVIAlgorithm2.jpg>
+Package pdftex.def Info: imgs/C3-BBVIAlgorithm2.jpg  used on input line 601.
+(pdftex.def)             Requested size: 133.84483pt x 162.86514pt.
+
+
+[15 <./imgs/C3-BBVIAlgorithm2.jpg>]
+
+[16]
+
+[17]
+
+[18]
+<imgs/C3-ELBO.png, id=90, 847.0044pt x 396.0396pt>
+File: imgs/C3-ELBO.png Graphic file (type png)
+<use imgs/C3-ELBO.png>
+Package pdftex.def Info: imgs/C3-ELBO.png  used on input line 750.
+(pdftex.def)             Requested size: 292.7776pt x 136.89365pt.
+<imgs/C3-MeanConvergence.png, id=91, 835.4412pt x 396.0396pt>
+File: imgs/C3-MeanConvergence.png Graphic file (type png)
+<use imgs/C3-MeanConvergence.png>
+Package pdftex.def Info: imgs/C3-MeanConvergence.png  used on input line 755.
+(pdftex.def)             Requested size: 292.7776pt x 138.78513pt.
+<imgs/C3-TauConvergence.png, id=92, 835.4412pt x 396.0396pt>
+File: imgs/C3-TauConvergence.png Graphic file (type png)
+<use imgs/C3-TauConvergence.png>
+Package pdftex.def Info: imgs/C3-TauConvergence.png  used on input line 760.
+(pdftex.def)             Requested size: 292.7776pt x 138.78513pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+
+[19 <./imgs/C3-ELBO.png>]
+
+[20 <./imgs/C3-MeanConvergence.png> <./imgs/C3-TauConvergence.png>]
+Overfull \hbox (6.72124pt too wide) detected at line 830
+\OMS/cmsy/m/n/10.95 r[]\OML/cmm/m/it/10.95 A\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 ^^Q\OT1/cmr/m/n/10.95 ) = [] = [] = [] = []
+ []
+
+
+
+[21]
+Underfull \hbox (badness 10000) in paragraph at lines 847--849
+
+ []
+
+
+
+[22]
+
+[23]
+
+[24]
+
+[25]
+
+[26]
+
+[27]
+
+[28]
+
+[29]
+<imgs/C4-NGDvsGD.png, id=132, 859.2903pt x 690.1785pt>
+File: imgs/C4-NGDvsGD.png Graphic file (type png)
+<use imgs/C4-NGDvsGD.png>
+Package pdftex.def Info: imgs/C4-NGDvsGD.png  used on input line 1200.
+(pdftex.def)             Requested size: 376.42744pt x 302.34201pt.
+
+
+[30 <./imgs/C4-NGDvsGD.png>] (./report.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 6898 strings out of 474662
- 131677 string characters out of 5751108
- 662336 words of memory out of 5000000
- 29906 multiletter control sequences out of 15000+600000
- 563092 words of font info for 53 fonts, out of 8000000 for 9000
+ 7707 strings out of 474662
+ 143203 string characters out of 5751108
+ 1121946 words of memory out of 5000000
+ 30699 multiletter control sequences out of 15000+600000
+ 569661 words of font info for 79 fonts, out of 8000000 for 9000
  319 hyphenation exceptions out of 8191
- 108i,7n,107p,10983b,288s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on report.pdf (1 page, 37465 bytes).
+ 108i,15n,107p,10983b,1787s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ </Users/brunobryan/Library/texlive/2025basic/texmf-var/fonts/pk/ljfour/jknappen/ec/tctt1000.600pk> </Users/brunobryan/Library/texlive/2025basic/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1095.600pk></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex8.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on report.pdf (30 pages, 916998 bytes).
 PDF statistics:
- 28 PDF objects out of 1000 (max. 8388607)
- 16 compressed objects within 1 object stream
+ 222 PDF objects out of 1000 (max. 8388607)
+ 130 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 56 words of extra memory for PDF output out of 10000 (max. 10000000)
 
