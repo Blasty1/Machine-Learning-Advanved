@@ -1318,5 +1318,15 @@ The authors propose to use stop-gradient function on the variational parameters 
 The score function acts as a control variate: a zero-expectation term added to an estimator in order to reduce variance.
 
 \subsubsection*{Question 3.1.25}
+To implement Algorithm 2, we remove the unnecessary score-function component of the reparameterized gradient. Practically, this requires stopping the flow of gradients from the reconstruction term back into the encoder parameters $\phi$\\
+In PyTorch, the most direct way to achieve this is to detach the latent variable z,
+\[ zng = detach(z) \]
+Crucially, we do not detach the encoder parameters $\phi$ themselves; doing so would also remove their gradients from the KL divergence term, which must continue to update the encoder. By detaching z, we selectively block gradients from the reconstruction term while preserving the KL gradients, exactly as required by Algorithm 2.\\
 
+
+\textbf{Conclusion} We observe a significant decrease in the Evidence Lower Bound (ELBO) for Algorithm 2 compared to Algorithm 1, despite the former demonstrating lower variance. I attempted several different configurations to improve this outcome. These attempts included detaching only the mean—the variational parameter associated with the high est gradient variance—and decreasing the overall learning rate. However, the result consistently remained the same. This outcome was entirely unexpected, as the goal of employing variance reduction techniques is to stabilize training and lower gradient variance without compromising the quality of the final result. The fact that the ELBO quality severely diminished while the variance decreased suggests that the implementation, although successful in reducing noise, introduced a fundamental instability that prevented convergence to the correct objective function
+
+\section*{A}
+\subsection*{A.1}
+\subsubsection*{Question}
 \end{document}
