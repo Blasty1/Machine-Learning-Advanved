@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1765396505.32467 "/Users/brunobryan/Desktop/Programmazione/Machine-Learning-Advanved/Assignment-AD1/report.tex" "report.pdf" "report" 1765396507.99056 0
-  "/Users/brunobryan/Desktop/Programmazione/Machine-Learning-Advanved/Assignment-AD1/report.tex" 1765396504.9393 59980 fd19b64736b6568e7285f14334a6eec0 ""
+["pdflatex"] 1765406706.5848 "/Users/brunobryan/Desktop/Programmazione/Machine-Learning-Advanved/Assignment-AD1/report.tex" "report.pdf" "report" 1765406708.70578 0
+  "/Users/brunobryan/Desktop/Programmazione/Machine-Learning-Advanved/Assignment-AD1/report.tex" 1765406704.16629 66675 63a9034f550ac49e74f1fae4cae37756 ""
   "/Users/brunobryan/Library/texlive/2025basic/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1095.600pk" 1763892558.45586 12644 0e6dc0bccb8d8754be58f4023273319f ""
   "/Users/brunobryan/Library/texlive/2025basic/texmf-var/fonts/pk/ljfour/jknappen/ec/tctt1000.600pk" 1765301297.08848 9468 911477feee106c2951c92793a3aea11f ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/tfm/jknappen/ec/tcrm1095.tfm" 1136768653 1536 02c06700a42be0f5a28664c7273f82e7 ""
@@ -30,7 +30,6 @@
   "/usr/local/texlive/2025basic/texmf-dist/fonts/tfm/public/cm/cmsy10.tfm" 1136768653 1124 6c73e740cf17375f03eec0ee63599741 ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/tfm/public/cm/cmsy6.tfm" 1136768653 1116 933a60c408fc0a863a92debe84b2d294 ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/tfm/public/cm/cmsy8.tfm" 1136768653 1120 8b7d695260f3cff42e636090a8002094 ""
-  "/usr/local/texlive/2025basic/texmf-dist/fonts/tfm/public/cm/cmti10.tfm" 1136768653 1480 aa8e34af0eb6a2941b776984cf1dfdc4 ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/tfm/public/cm/cmtt10.tfm" 1136768653 768 1321e9409b4137d6fb428ac9dc956269 ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/tfm/public/cm/cmtt12.tfm" 1136768653 772 9a936b7f5e2ff0557fce0f62822f0bbf ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb" 1248133631 34811 78b52f49e893bcba91bd7581cdc144c0 ""
@@ -48,7 +47,6 @@
   "/usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb" 1248133631 32569 5e5ddc8df908dea60932f3c484a54c0d ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb" 1248133631 32587 1788b0c1c5b39540c96f5e42ccd6dae8 ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb" 1248133631 32626 4f5c1b83753b1dd3a97d1b399a005b4b ""
-  "/usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb" 1248133631 37944 359e864bd06cde3b1cf57bb20757fb06 ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb" 1248133631 31099 c85edf1dd5b9e826d67c9c7293b6786c ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb" 1248133631 24252 1e4e051947e12dfb50fee0b7f4e26e3a ""
   "/usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex8.pfb" 1248133631 30273 87a352d78b6810ae5cfdc68d2fb827b2 ""
@@ -92,8 +90,11 @@
   "/usr/local/texlive/2025basic/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1763742207 79187 04b17f8738f833a5a5f7867124477b59 ""
   "/usr/local/texlive/2025basic/texmf-var/web2c/pdftex/pdflatex.fmt" 1763742197 2663840 338e425676be632da9968b6f25084700 ""
   "/usr/local/texlive/2025basic/texmf.cnf" 1741448314 628 81d1ada0f601fb1ffa62f1323192d946 ""
+  "imgs/A1-DGM.jpeg" 1765399444.65783 101497 8177fa717e505e8fd434e7c0087f106d ""
   "imgs/B1-Comparison.png" 1765380002.58367 15296 a3608cee28874081e88b699181270bfb ""
   "imgs/B2-Algorithm2OfStickingTheLandingPaper.jpeg" 1765385362.77051 77985 6a3aaf43d27427aeb88defa6d24538a1 ""
+  "imgs/B2-ELBO-1.png" 1765397471.46669 24509 4a41ea11be1f4565a4862ffbffd2ab53 ""
+  "imgs/B2-ELBO-2.png" 1765397479.82689 21144 4c436c2c171a90cfd31d0641a772e28a ""
   "imgs/C2-RaoBlackwellizedModel.png" 1765330657.39774 19268 9838b63ae33622d35ef44a3cb47405b6 ""
   "imgs/C3-BBVIAlgorithm2.jpg" 1765331342.27 214130 73b2b96a26cc6284b0c6f83b06c7681d ""
   "imgs/C3-ELBO.png" 1765334218.62229 46800 cabf9886f94365bc0e8dc9751f387b9c ""
@@ -105,8 +106,8 @@
   "imgs/D3-MeanConvergence.png" 1765303513.63651 35843 4a3e63b7c4bf6c25e635cf6cf318520d ""
   "imgs/D3-Normal-NormalGamma-model.png" 1765282176.07952 60638 898e7c1ec31c3e8f4dd8f9723f5196b1 ""
   "imgs/D3-TauConvergence.png" 1765303522.45127 29702 061b5b3c097bb6af9f4ca644532c5ecd ""
-  "report.aux" 1765396507.87583 2027 5f4059ae1573c59f988cefedc67e70e1 "pdflatex"
-  "report.tex" 1765396504.9393 59980 fd19b64736b6568e7285f14334a6eec0 ""
+  "report.aux" 1765406708.56602 1920 272293c7e65d181467f6b89de773d72f "pdflatex"
+  "report.tex" 1765406704.16629 66675 63a9034f550ac49e74f1fae4cae37756 ""
   (generated)
   "report.aux"
   "report.log"

@@ -34,14 +34,14 @@ Work assignment:
     - B.1
        - 3.1.20  ☑️
     - B.2
-        - 3.1.21 ✅
-        - 3.1.22 ✅
-        - 3.1.23 ✅
-        - 3.1.24 ✅
-        - 3.1.25 ✅ ( non sembra dare grandi miglioramenti, senmbra strano )
+        - 3.1.21 ☑️
+        - 3.1.22 ☑️
+        - 3.1.23 ☑️
+        - 3.1.24 ☑️
+        - 3.1.25 ☑️ ( non sembra dare grandi miglioramenti, senmbra strano )
 - Assignment A
     - A.1
-        - 4.1.26 ✅
+        - 4.1.26 ☑️
     - A.2
         - 4.2.27
         - 4.2.28

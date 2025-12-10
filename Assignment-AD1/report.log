@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.11.21)  10 DEC 2025 20:55
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.11.21)  10 DEC 2025 23:45
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -489,32 +489,93 @@ File: imgs/B2-Algorithm2OfStickingTheLandingPaper.jpeg Graphic file (type jpg)
 Package pdftex.def Info: imgs/B2-Algorithm2OfStickingTheLandingPaper.jpeg  used on input line 1313.
 (pdftex.def)             Requested size: 167.29967pt x 97.87953pt.
 
+Underfull \hbox (badness 10000) in paragraph at lines 1323--1325
+
+ []
+
+
 
 [34 <./imgs/B2-Algorithm2OfStickingTheLandingPaper.jpeg>]
 
 [35]
+<imgs/B2-ELBO-1.png, id=157, 421.3341pt x 327.3831pt>
+File: imgs/B2-ELBO-1.png Graphic file (type png)
+<use imgs/B2-ELBO-1.png>
+Package pdftex.def Info: imgs/B2-ELBO-1.png  used on input line 1399.
+(pdftex.def)             Requested size: 250.95587pt x 194.99767pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<imgs/B2-ELBO-2.png, id=158, 421.3341pt x 327.3831pt>
+File: imgs/B2-ELBO-2.png Graphic file (type png)
+<use imgs/B2-ELBO-2.png>
+Package pdftex.def Info: imgs/B2-ELBO-2.png  used on input line 1403.
+(pdftex.def)             Requested size: 250.95587pt x 194.99767pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<imgs/A1-DGM.jpeg, id=159, 1312.905pt x 220.825pt>
+File: imgs/A1-DGM.jpeg Graphic file (type jpg)
+<use imgs/A1-DGM.jpeg>
+Package pdftex.def Info: imgs/A1-DGM.jpeg  used on input line 1413.
+(pdftex.def)             Requested size: 292.7776pt x 49.24207pt.
+
 
 [36]
 
-[37] (./report.aux)
+[37 <./imgs/B2-ELBO-1.png> <./imgs/B2-ELBO-2.png> <./imgs/A1-DGM.jpeg>]
+Overfull \hbox (25.00693pt too wide) detected at line 1451
+[]
+ []
+
+
+
+[38]
+Overfull \hbox (25.00693pt too wide) detected at line 1466
+[]
+ []
+
+
+Overfull \hbox (43.869pt too wide) detected at line 1470
+\OT1/cmr/m/n/10.95 = \U/msb/m/n/10.95 E[]\OT1/cmr/m/n/10.95 [\OML/cmm/m/it/10.95 D[]\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 q\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 x[] \OMS/cmsy/m/n/10.95 j \OML/cmm/m/it/10.95 x[]\OT1/cmr/m/n/10.95 ) \OMS/cmsy/m/n/10.95 k \OML/cmm/m/it/10.95 p\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 x[]\OT1/cmr/m/n/10.95 ))] + [] \U/msb/m/n/10.95 E[]\OT1/cmr/m/n/10.95 [\OML/cmm/m/it/10.95 D[]\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 q\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 x[] \OMS/cmsy/m/n/10.95 j \OML/cmm/m/it/10.95 x[]; x[]\OT1/cmr/m/n/10.95 ) \OMS/cmsy/m/n/10.95 k \OML/cmm/m/it/10.95 p[]\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 x[] \OMS/cmsy/m/n/10.95 j \OML/cmm/m/it/10.95 x[]\OT1/cmr/m/n/10.95 ))] \OMS/cmsy/m/n/10.95 ^^@ \U/msb/m/n/10.95 E[]\OT1/cmr/m/n/10.95 [[] \OML/cmm/m/it/10.95 p[]\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 x[] \OMS/cmsy/m/n/10.95 j \OML/cmm/m/it/10.95 x[]\OT1/cmr/m/n/10.95 )]
+ []
+
+
+Overfull \hbox (37.97252pt too wide) detected at line 1482
+[]
+ []
+
+
+
+[39]
+Overfull \hbox (56.26793pt too wide) detected at line 1492
+[]
+ []
+
+
+
+[40]
+
+[41] (./report.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 7785 strings out of 474662
- 144733 string characters out of 5751108
+ 7799 strings out of 474662
+ 145035 string characters out of 5751108
  1121946 words of memory out of 5000000
- 30774 multiletter control sequences out of 15000+600000
- 570628 words of font info for 82 fonts, out of 8000000 for 9000
+ 30789 multiletter control sequences out of 15000+600000
+ 570282 words of font info for 81 fonts, out of 8000000 for 9000
  319 hyphenation exceptions out of 8191
  108i,16n,107p,10983b,1787s stack positions out of 10000i,1000n,20000p,200000b,200000s
- </Users/brunobryan/Library/texlive/2025basic/texmf-var/fonts/pk/ljfour/jknappen/ec/tctt1000.600pk> </Users/brunobryan/Library/texlive/2025basic/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1095.600pk></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex8.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on report.pdf (37 pages, 1051529 bytes).
+ </Users/brunobryan/Library/texlive/2025basic/texmf-var/fonts/pk/ljfour/jknappen/ec/tctt1000.600pk> </Users/brunobryan/Library/texlive/2025basic/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1095.600pk></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex8.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on report.pdf (41 pages, 1189925 bytes).
 PDF statistics:
- 260 PDF objects out of 1000 (max. 8388607)
- 154 compressed objects within 2 object streams
+ 272 PDF objects out of 1000 (max. 8388607)
+ 159 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 66 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 81 words of extra memory for PDF output out of 10000 (max. 10000000)
 

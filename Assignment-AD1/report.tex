@@ -1322,11 +1322,185 @@ To implement Algorithm 2, we remove the unnecessary score-function component of 
 In PyTorch, the most direct way to achieve this is to detach the latent variable z,
 \[ zng = detach(z) \]
 Crucially, we do not detach the encoder parameters $\phi$ themselves; doing so would also remove their gradients from the KL divergence term, which must continue to update the encoder. By detaching z, we selectively block gradients from the reconstruction term while preserving the KL gradients, exactly as required by Algorithm 2.\\
+\begin{lstlisting}
+class Model(nn.Module):
+# it wrap the encoder and the decoder
+def __init__(self, Encoder, Decoder):
+    super(Model, self).__init__()
+    self.Encoder = Encoder
+    self.Decoder = Decoder
 
+def reparameterization(self, mean, std):
+    # 1. Sample standard normal noise epsilon: epsilon ~ N(0, I)
+    # Use torch.randn_like(mean) to ensure 'eps' has the same size and device
+    # as 'mean' (or 'std').
+    eps = torch.randn_like(mean)
+    z_pathwise = mean + eps * std
+    
+    z_stop_grad = z_pathwise.detach()
+    
+    return z_pathwise,z_stop_grad
 
+def forward(self, x):
+    # insert your code here
+    mean, log_var = self.Encoder.forward(x)
+    
+    std = torch.sqrt(torch.exp(log_var))
+    
+    z_pathwise,z_stop_grad = self.reparameterization(mean, std)
+    
+    theta = self.Decoder.forward(z_stop_grad)
+    return theta, mean, log_var, z_pathwise,z_stop_grad
+\end{lstlisting}
+
+\begin{lstlisting}
+from torch.optim import Adam
+
+print("Start training VAE...")
+model.train()
+
+# optimizer
+optimizer = Adam(model.parameters(), lr=lr)
+pbar = tqdm(range(epochs))
+elbo_2= []
+for epoch in pbar:
+    total_loss = 0
+    total_samples = 0
+    for batch_idx, (x, _) in enumerate(train_loader):
+        x = x.to(device)
+        x = x.view(-1, x_dim)
+        x = torch.round(x)
+
+        optimizer.zero_grad()
+
+        # insert your code here
+        theta_ng, mean, log_var,_,_= model.forward(x)
+        
+        loss = loss_function(x,theta_ng,mean,log_var) # it is computed by detaching z, so we pass the theta_ng
+        loss.backward()
+        optimizer.step()
+
+        # loss.item() is the mean. Multiply by batch size to get the sum.
+        total_loss += loss.item() * x.size(0)
+        total_samples += x.size(0)
+
+    # Correct global average
+    avg_loss = total_loss / total_samples
+
+    pbar.set_description(f"Epoch {epoch+1}/{epochs},"
+                         f" Loss: {avg_loss:.4f},"
+                         f" ELBO: {-avg_loss:.4f}")
+    elbo_2.append(-avg_loss)
+
+print("Finish!!")
+\end{lstlisting}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.6\linewidth]{imgs/B2-ELBO-1.png}
+\end{figure}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.6\linewidth]{imgs/B2-ELBO-2.png}
+\end{figure}
 \textbf{Conclusion} We observe a significant decrease in the Evidence Lower Bound (ELBO) for Algorithm 2 compared to Algorithm 1, despite the former demonstrating lower variance. I attempted several different configurations to improve this outcome. These attempts included detaching only the mean—the variational parameter associated with the high est gradient variance—and decreasing the overall learning rate. However, the result consistently remained the same. This outcome was entirely unexpected, as the goal of employing variance reduction techniques is to stabilize training and lower gradient variance without compromising the quality of the final result. The fact that the ELBO quality severely diminished while the variance decreased suggests that the implementation, although successful in reducing noise, introduced a fundamental instability that prevented convergence to the correct objective function
 
-\section*{A}
+\section*{A Section}
 \subsection*{A.1}
-\subsubsection*{Question}
+\subsubsection*{Question 4.1.26}
+We consider the following DGM, which gives us the following factorizations:
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.7\linewidth]{imgs/A1-DGM.jpeg}
+\end{figure}
+\[
+p_\theta(x_{0:T}) = p_\theta(x_T) \cdot p_\theta(x_{t-1} | x_t) \cdot ... \cdot p_\theta(x_{1} | x_0) = p_\theta(x_T) \prod_{t=1}^{T-1} p_\theta(x_{t-1} | x_t)
+\]
+\[
+q(x_{1:T} | x_0) = \prod_{t=1}^{T} q(x_t | x_{t-1})
+\]
+We will use this properties and the Jensens inequality:
+\begin{align*}
+\mathbb{E}[-\log p_\theta(x_0)] &= -\log \int_{x_{1:T}} p_\theta(x_{0:T}) \, dx_{1:T} \\
+&= -\log \int_{x_{1:T}} q(x_{1:T} \mid x_0) \frac{p_\theta(x_{0:T})}{q(x_{1:T} \mid x_0)} \, dx_{1:T} \\
+&= -\log \mathbb{E}_{q(x_{1:T} \mid x_0)} \left[ \frac{p_\theta(x_{0:T})}{q(x_{1:T} \mid x_0)} \right] \\
+& \leq -\mathbb{E}_{q(x_{1:T} \mid x_0)} \left[ \log \frac{p_\theta(x_{0:T})}{q(x_{1:T} \mid x_0)} \right] \\
+&= \mathbb{E}_{q(x_{1:T} \mid x_0)} \left[ - \log p(x_T) - \sum_{t=1}^T \log \frac{p_\theta(x_{t-1} \mid x_t)}{q(x_t \mid x_{t-1})} \right] \\
+&= \mathbb{E}_{q(x_{1:T} \mid x_0)} \left[ - \log p(x_T) - \sum_{t > 1}^T \log \frac{p_\theta(x_{t-1} \mid x_t)}{q(x_t \mid x_{t-1})} - \log \frac{p_\theta(x_0 \mid x_1)}{q(x_1 \mid x_0)} \right]
+\end{align*}
+We apply the following transformation
+\[
+q(x_t \mid x_{t-1}) = \frac{q(x_{t-1} \mid x_{t} , x_0)}{q(x_t, x_0)}
+\]
+And 
+\begin{align*}
+q(x_{t-1} \mid x_{t} , x_0) &= \frac{q(x_{t-1} , x_t , x_0 )}{q(x_t , x_0)}\\
+&= \frac{q(x_t | x_{t-1} , x_0) q(x_{t-1},x_0)}{q(x_t,x_0)}\\
+&= \frac{q(x_t | x_{t-1}) q(x_{t-1} \mid x_0) q(x_0)}{q(x_t | x_0) q(x_0)}\\
+&= \frac{q(x_t | x_{t-1}) q(x_{t-1} \mid x_0)}{q(x_t | x_0)} 
+\end{align*}
+Because we know that \(q(x_t | x_{t-1} , x_0) = q(x_t | x_{t-1}) \)\\
+We can finally invert the equation to retrieve the term $q(x_t \mid x_{t-1})$ as
+\[
+    q(x_t \mid x_{t-1}) = \frac{q(x_{t-1} | x_t, x_0) q(x_t | x_0)}{q(x_{t-1}| x_0)}
+\]
+Now, we can come back to the proof  
+\begin{align*}
+\mathbb{E}[-\log p_\theta(x_0)] & \leq \mathbb{E}_{q(x_{1:T} \mid x_0)} \left[ - \log p(x_T) - \sum_{t > 1}^T \log \frac{p_\theta(x_{t-1} \mid x_t)}{q(x_t \mid x_{t-1})} - \log \frac{p_\theta(x_0 \mid x_1)}{q(x_1 \mid x_0)} \right]\\
+&=   \mathbb{E}_{q(x_{1:T} \mid x_0)} \left[ - \log p(x_T) - \sum_{t > 1}^T \log \frac{p_\theta(x_{t-1} \mid x_t)}{\frac{q(x_{t-1} | x_t, x_0) q(x_t | x_0)}{q(x_{t-1}| x_0)}} - \log \frac{p_\theta(x_0 \mid x_1)}{q(x_1 \mid x_0)} \right]\\
+&=  \mathbb{E}_{q(x_{1:T} \mid x_0)} \left[ - \log p(x_T) - \sum_{t > 1}^T \log \frac{p_\theta(x_{t-1} \mid x_t)}{q(x_{t-1} | x_t, x_0)} \frac{q(x_{t-1}| x_0)}{q(x_t | x_0)}  - \log \frac{p_\theta(x_0 \mid x_1)}{q(x_1 \mid x_0)} \right]\\
+\end{align*}
+We can know divide the sum  $\sum_{t > 1}^T \log \frac{p_\theta(x_{t-1} \mid x_t)}{q(x_{t-1} | x_t, x_0)} \frac{q(x_{t-1}| x_0)}{q(x_t | x_0)}$
+\[
+\sum_{t > 1}^T \log \frac{p_\theta(x_{t-1} \mid x_t)}{q(x_{t-1} | x_t, x_0)} \frac{q(x_{t-1}| x_0)}{q(x_t | x_0)} = \sum_{t > 1}^T \log \frac{p_\theta(x_{t-1} \mid x_t)}{q(x_{t-1} | x_t, x_0)}  + \sum_{t > 1}^T \log \frac{q(x_{t-1}| x_0)}{q(x_t | x_0)}
+\]
+We can focus on the second term, trying to expand it
+\begin{align*}
+\sum_{t=2}^T \log \frac{q(x_{t-1} \mid x_0)}{q(x_t \mid x_0)} &= -\log \prod_{t=2}^T \frac{q(x_{t-1} \mid x_0)}{q(x_t \mid x_0)} \\
+&= \log \left( \frac{q(x_1 \mid x_0)}{q(x_2 \mid x_0)} \cdot \frac{q(x_2 \mid x_0)}{q(x_3 \mid x_0)} \cdots \frac{q(x_{T-1} \mid x_0)}{q(x_T \mid x_0)} \right) \\
+&= \log \frac{q(x_1 \mid x_0)}{q(x_T \mid x_0)} = -\log q(x_T \mid x_0) +\log q(x_1 \mid x_0)
+\end{align*}
+We can replace it in the main formula for the proof
+\begin{align*}
+\mathbb{E}[-\log p_\theta(x_0)] & \leq \mathbb{E}_{q(x_{1:T} \mid x_0)} \left[ - \log p(x_T) - \sum_{t > 1}^T \log \frac{p_\theta(x_{t-1} \mid x_t)}{q(x_{t-1} | x_t, x_0)} \frac{q(x_{t-1}| x_0)}{q(x_t | x_0)}  - \log \frac{p_\theta(x_0 \mid x_1)}{q(x_1 \mid x_0)} \right]\\
+&=  \mathbb{E}_{q(x_{1:T} \mid x_0)} \left[ - \log \frac{p(x_T)}{q(x_T | x_0)} - \sum_{t > 1}^T \log \frac{p_\theta(x_{t-1} \mid x_t)}{q(x_{t-1} | x_t, x_0)}  - \log p_\theta(x_0 \mid x_1) \right]
+\end{align*}
+The linearity property of the expectation operator allows us to decompose the expectation of a sum of random variables into the sum of their individual expectations.
+\[
+= \mathbb{E}_{q_1} [D_{\text{KL}}(q(x_T \mid x_0) \parallel p(x_T))] + \sum_{t>2}^T \mathbb{E}_{q_2} [D_{\text{KL}}(q(x_{t-1} \mid x_t, x_0) \parallel p_\theta(x_{t-1} \mid x_t))] - \mathbb{E}_{q_3} [\log p_\theta(x_0 \mid x_1)]
+\]
+We analyze each term individually for finding the right q:
+\begin{itemize}
+    \item $q_1$ \vspace{1em}\\
+Knowing that \(q(x_{1:T} | x_0) = q(x_T | x_0) q(x_{1:{T-1}} | x_T , x_0) \)
+\begin{align*} 
+\mathbb{E}_{q(x_{1:T}|x_0)}\left[-\log \frac{p(x_T)}{q(x_T|x_0)}\right] &= -\int q(x_{1:T}|x_0) \log \frac{p(x_T)}{q(x_T|x_0)} \, dx_{1:T} \\
+&= -\int q(x_T|x_0) q(x_{1:T-1}|x_T, x_0) \log \frac{p(x_T)}{q(x_T|x_0)} \, dx_{1:T} \\
+&= -\int q(x_T|x_0) \left[\int q(x_{1:T-1}|x_T, x_0) \, dx_{1:T-1}\right] \log \frac{p(x_T)}{q(x_T|x_0)} \, dx_T \\
+&= -\int q(x_T|x_0) \log \frac{p(x_T)}{q(x_T|x_0)} \, dx_T \\
+&= \mathbb{E}_{q(x_T|x_0)}\left[-\log \frac{p(x_T)}{q(x_T|x_0)}\right] \\
+&= D_{\text{KL}}(q(x_T|x_0) \| p(x_T))
+\end{align*}
+The term simplifies directly into the Kullback-Leibler divergence.
+    \item $q_2$ \vspace{1em}\\
+Knowing that $q(x_{t-1}, x_t | x_0) = q(x_t | x_0) q(x_{t-1} | x_t, x_0)$
+\begin{align*} 
+\mathbb{E}_{q(x_{1:T}|x_0)}\left[-\log \frac{p_{\theta}(x_{t-1}|x_t)}{q(x_{t-1}|x_t, x_0)}\right] &= -\int q(x_{1:T}|x_0) \log \frac{p_{\theta}(x_{t-1}|x_t)}{q(x_{t-1}|x_t, x_0)} \, dx_{1:T} \\
+&= -\int q(x_{t-1}, x_t | x_0) \log \frac{p_{\theta}(x_{t-1}|x_t)}{q(x_{t-1}|x_t, x_0)} \, dx_{t-1} \, dx_t \\
+&= -\int q(x_t|x_0) q(x_{t-1}|x_t, x_0) \log \frac{p_{\theta}(x_{t-1}|x_t)}{q(x_{t-1}|x_t, x_0)} \, dx_{t-1} \, dx_t \\
+&= -\int q(x_t|x_0) \left[\int q(x_{t-1}|x_t, x_0) \log \frac{p_{\theta}(x_{t-1}|x_t)}{q(x_{t-1}|x_t, x_0)} \, dx_{t-1}\right] \, dx_t \\
+&= \mathbb{E}_{q(x_t|x_0)}\left[D_{\text{KL}}(q(x_{t-1}|x_t, x_0) \| p_{\theta}(x_{t-1}|x_t))\right].
+\end{align*}
+We found \(q_2 = q(x_t | x_0)\)
+\newpage
+    \item $q_3$ \vspace{1em}\\
+Knowing that $q(x_{1:T}|x_0) = q(x_1|x_0) q(x_{2:T}|x_0, x_1)$ and $f(x_1) = \log p_\theta(x_0 | x_1)$
+\begin{align*}
+\mathbb{E}_{q(x_{1:T}|x_0)}[\log p_{\theta}(x_0 | x_1)] &= \int q(x_{1:T}|x_0) \log p_{\theta}(x_0 | x_1) \, dx_{1:T} \\
+&= \int q(x_{1:T}|x_0) f(x_1) \, dx_{1:T} \\
+&= \int q(x_1|x_0) f(x_1) \left[\int q(x_{2:T}|x_0, x_1) \, dx_{2:T}\right] \, dx_1 \\
+&= \int q(x_1|x_0) f(x_1) \, dx_1 \\
+&= \mathbb{E}_{q(x_1|x_0)}[\log p_{\theta}(x_0 | x_1)].
+\end{align*}
+We found \(q_3 = q(x_1 | x_0)\)
+\end{itemize}
 \end{document}
