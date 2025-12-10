@@ -41,6 +41,9 @@
         {∞}{{$\infty$}}1
 }
 
+\newcommand{\elbo}{\mathcal{L}}
+\newcommand{\E}{\mathbb{E}}
+
 \title{Assignment 1AD, 2025}
 \subtitle{DD2434 Machine Learning, Advanced Course}
 \author{
@@ -488,4 +491,68 @@ plt.grid(alpha=0.3)
     \end{tabular}
     \caption{Data Statistics}
 \end{table}
+
+\section*{C Section}
+\subsection{C.1}
+\subsubsection*{Question 2.1.10}
+We want to show the the IWELBO is a valid lower bound on the log-marginal likelihood.
+\[
+\elbo_K = \E_{Z_1, ... ,Z_K }\left[\log \left( \frac{1}{K} \sum_{k=1}^{K} \frac{p(X,Z_k)}{q(Z_k | X)}\right) \right]
+\]
+\[
+\elbo_K \leq \log p(X)
+\]
+We start the proof by applying the Jensen's equality
+\[
+    \E_Z \left[\log f(Z) \right] \leq \log \E_Z\left[f(Z)\right]
+\]
+The IWELBO becomes:
+\begin{align*}
+\E_{Z_1, ... ,Z_K }\left[\log \left( \frac{1}{K} \sum_{k=1}^{K} \frac{p(X,Z_k)}{q(Z_k | X)}\right) \right] &\leq \log \left( \frac{1}{K} \sum_{k=1}^{K} \E_{Z_K}\left[ \frac{p(X,Z_k)}{q(Z_k | X)} \right] \right)\\
+& \leq \log  \left( \frac{1}{K} \sum_{k=1}^{K} \int \frac{P(Z_k, X)}{q(Z_k| X)} q(Z_k | X) dZ_k \right)\\
+& \leq \log \frac{1}{K} \sum_{k=1}^{K} p(X)\\
+& \leq \log P(X)
+\end{align*}
+This is the expected result
+\[
+\elbo_K \leq \log P(X)
+\]
+
+\subsubsection*{Question 2.1.11}
+We want to prove that the IWELBO tightens the variational bound for K samples
+\[
+\elbo_K \geq \elbo_1  \quad \quad  K > 1
+\]
+We know that
+\[
+\elbo_K = \E_{Z_1, ... ,Z_K }\left[\log \left( \frac{1}{K} \sum_{k=1}^{K} \frac{p(X,Z_k)}{q(Z_k | X)}\right) \right]
+\quad \quad \quad 
+\elbo_1 = \E_Z\left[\log \frac{P(X,Z)}{q(Z)}\right]
+\]
+We start by observing
+\[
+\E_{Z_1, ... ,Z_K }\left[\log \left( \frac{1}{K} \sum_{k=1}^{K} \frac{p(X,Z_k)}{q(Z_k | X)}\right) \right] = \E_{Z_1, ... ,Z_K }\left[\log \E_{I={\{k_1\}}}\left[\frac{p(X,Z_{k_1})}{q(Z_{k_1} | X)}\right]\right]
+\]
+I is a set which has size equal to 1 ( it contains only one index $k_1$ which is randomly chosen from ${1 , 2 , . . . , K}$ with equal probability $\frac{1}{K}$)
+\[
+\E_{I={\{k_1\}}}\left[\frac{a_{k_1}}{1}\right] = \frac{a_1 + ... + a_k}{k}
+\]
+In other words, it is another way of expressing the sum.\\
+Then,we apply the Jensen's inequality
+\[
+\elbo_K \geq  \E_{Z_1, ... ,Z_K }\left[\E_{I={\{k_1\}}}\left[\log \frac{p(X,Z_{k_1})}{q(Z_{k_1} | X)}\right]\right]
+\]
+We invert the two expectations
+\[
+\elbo_K \geq  \E_{I={\{k_1\}}}\left[\E_{Z_{k_1}}\left[\log \frac{p(X,Z_{k_1})}{q(Z_{k_1} | X)}\right]\right]
+\]
+Since I uniformly select one index from ${1 , . . . , K}$ and each $z_k$ is i.i.d from $q(z|x)$ and the inner expectation gives the same value for any choice of ${k_1}$
+\begin{align*}
+\E_{I={\{k_1\}}}\left[\E_{Z_{k_1}}\left[\log \frac{p(X,Z_{k_1})}{q(Z_{k_1} | X)}\right]\right] = \E_z\left[\log \frac{P(X,Z)}{q(Z|X)}\right] = \elbo_1
+\end{align*}
+We have proved that
+\[
+\elbo_k \geq \elbo_1
+\]
+
 \end{document}
