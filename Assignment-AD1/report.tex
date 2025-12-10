@@ -1207,4 +1207,71 @@ The Fisher information matrix (positive definite) defines the local curvature of
 By multiplying the standard gradient with the inverse of the FIM , NGD scales down updates along shallow directions and amplifies updates along directions that cause a large change in the distribution (even if the standard gradient is small), effectively making the optimization landscape appear more like a sphere
 
 
+\section*{B Section}
+\subsection*{B.1}
+\subsubsection*{Question 3.1.20}
+We know that the categorical distribution is discrete and non-differentiable, making it impossible to backpropagate gradients through samples during training.
+We can use the Gumber-Max trick which provides a simple and efficient way to draw samples z from a categorical distribution
+\[
+z = \text{one hot}(\arg \max_i\left[ g_i + \log \pi_i \right])
+\]
+Where 
+\begin{itemize}
+    \item $\pi_1 . . . \pi_K$ are the class probabilities ( K is the number of class probabilities )
+    \item $g_1 . . . g_K$ are i.i.d. samples drawn from $\text{Gumbel}(0,1)$
+\end{itemize}
+But it is not differentiable: we can approximate the arg max function with a differentiable continuous function called softmax in order to generate k-dimensional sample vectors k-dimensional sample vectors $y \in \Delta^{k-1}$ ( one hot encoding )
+\[
+y_i = \frac{e^{\frac{\log \pi_i + g_i}{\tau}}}{\sum_{j=1}^{k}e^{\frac{\log \pi_j + g_j}{\tau}}}
+\]
+We can define the density of the Gumbel-Softmax distribution as
+\[
+p_{\pi, \tau}(y_1 , . . . , y_k) = \Gamma(k) \tau^{k-1} \left( \sum_{i=1}^{K} \frac{\pi_i}{y_i^\tau} \right)^{-k} \prod_{i=1}^{K} \frac{\pi_i}{y_i^{\tau+1}}
+\]
+As the softmax temperature $\tau$ approaches 0 $\tau \rightarrow 0$, samples from the Gumbel Softmax distribution become one-hot and the Gumbel-Softmax distribution becomes identical to the categorical distribution $p(z)$. As the temperature increase $\tau \rightarrow \infty$ , the samples becomes uniform .
+Below write a function that generates N samples from Categorical $a$, where $a = [a_0, a_1, a_2, a_3]$.
+\begin{lstlisting}
+def categorical_sampler(a, N):
+  samples = torch.distributions.Categorical(a).sample((N,))
+
+  return samples  # should be N-by-1
+\end{lstlisting}
+
+The option dim=-1 normalizes across the K categories for each sample ( each row (representing one sample) will sum to 1)
+\begin{lstlisting}
+# Hint: approximate the Categorical distribution with the Gumbel-Softmax distribution
+def categorical_reparametrize(a, N, temp=0.1, eps=1e-20):  # temp and eps are hyperparameters for Gumbel-Softmax
+  g_gumbel_0_1 = torch.distributions.Gumbel(0,1).sample((N,len(a)))
+  a.requires_grad = True
+  x = torch.log(a + eps) + g_gumbel_0_1
+  
+  samples = torch.nn.functional.softmax(x / temp, dim=-1)
+
+  return samples # make sure that your implementation allows the gradient to backpropagate
+\end{lstlisting}
+Comparing the samples
+\begin{lstlisting}
+    a = torch.tensor([0.1,0.2,0.5,0.2])
+    N = 1000
+    direct_samples = categorical_sampler(a, N)
+    reparametrized_samples = categorical_reparametrize(a, N, temp=0.1, eps=1e-20)
+
+    hard_samples = reparametrized_samples.argmax(dim=1,keepdim=True)
+    compare_samples(direct_samples, hard_samples, bins=4)
+\end{lstlisting}
+\textbf{Results}\\
+The graph shows that both methods produce similar distributions (mostly orange visible means they overlap well), which validates that our Gumbel-Softmax implementation is working correctly!
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.7\linewidth]{imgs/B1-Comparison.png}
+    \caption{Comparison of samples from direct categorical sampling vs. Gumbel-Softmax reparameterization}
+\end{figure}
+\newpage
+
+\newpage
+\subsection*{B.2}
+\subsubsection*{Question 3.1.21}
+Following the methodology from the Sticking the Landing paper, I derived the gradient of the ELBO under the reparameterization trick and showed how it can be decomposed into multiple terms, one of which is the score function. This decomposition reveals the connection between the reparameterization gradient and the score function gradient.
+
+
 \end{document}

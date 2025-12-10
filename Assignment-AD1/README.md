@@ -32,7 +32,7 @@ Work assignment:
 
 - Assignment B
     - B.1
-       - 3.1.20 ✅
+       - 3.1.20  ☑️
     - B.2
         - 3.1.21 ✅
         - 3.1.22 ✅
