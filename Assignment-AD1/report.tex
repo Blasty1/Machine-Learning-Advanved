@@ -493,7 +493,7 @@ plt.grid(alpha=0.3)
 \end{table}
 
 \section*{C Section}
-\subsection{C.1}
+\subsection*{C.1}
 \subsubsection*{Question 2.1.10}
 We want to show the the IWELBO is a valid lower bound on the log-marginal likelihood.
 \[
@@ -554,5 +554,28 @@ We have proved that
 \[
 \elbo_k \geq \elbo_1
 \]
+
+\subsection*{C.2}
+\subsubsection*{Question 2.1.12}
+Considering the model described below and the mean-field approximation, we derive the Rao-Blackwellized partial gradient of the ELBO w.r.t $\lambda_3$ 
+\[
+    \nabla_{\lambda_3} \elbo = E_{q_{(3)}} \left[ \nabla_{\lambda_3} \log q(z_3 | \lambda_3) \left( \log p_3(x,z_{(3)}) - \log q(z_3| \lambda_3) \right) \right]
+\]
+Where:
+\begin{itemize}
+    \item $z_3 = z$
+    \item $z_{(3)} = {z_3} \cup \text{Markov Blanket of } z_3=  \{z, v , x_n , y_n \} \forall n$
+    \begin{itemize}
+        \item Markov Blanket of a variable $z_3$ is all the parents, co-parents and children of $z_3$ $\rightarrow \{v , x_n , y_n \} \forall n$ 
+    \end{itemize}
+    \item $\log p_{3}(x, z)$ is the the portion of the joint probability that depends on $z_3 = z$ 
+\[
+\log p_3(x, z) = \log p(z | v) + \sum_{n=1}^{D} \log p(x_n | z, y_n) 
+\]
+    \item $q_{(3)}$ is the distribution of variables in the model that depend on the third variable z  ( the Markov Blanket of z and z )
+\[
+q_{(3)}(z_{(3)}) = q_{(3)}(z) = \prod_{z_j \in z_{(3)}} q(z_j | \lambda_j) =  q(z | \lambda_3) \cdot q(v | \lambda_4) \cdot \prod_{n} q(y_n | \lambda_{5,n})
+\]
+\end{itemize}
 
 \end{document}
