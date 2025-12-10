@@ -1271,7 +1271,52 @@ The graph shows that both methods produce similar distributions (mostly orange v
 \newpage
 \subsection*{B.2}
 \subsubsection*{Question 3.1.21}
-Following the methodology from the Sticking the Landing paper, I derived the gradient of the ELBO under the reparameterization trick and showed how it can be decomposed into multiple terms, one of which is the score function. This decomposition reveals the connection between the reparameterization gradient and the score function gradient.
+Following the methodology from the Sticking the Landing paper, I derived the gradient of the ELBO under the reparameterization trick and showed how it can be decomposed into multiple terms, one of which is the score function. This decomposition reveals the connection between the reparameterization gradient and the score function gradient.\\
+The joint distribution $p(x,z)$ can be evaluated as $p(x|z) \cdot p(z)$ , the ELBO can be written in the folllowing way ( which is preferred when we believe that $q_\phi(z|x) \approx p(z|x)$)
+\[
+\elbo(\phi) = E_{z \sim q}\left[ \log p(x|z) + \log p(z) -\log q_\phi(z|x) \right]
+\]
+Using the reparameterization trick we can express a sample z from a parametric distribution $q_\phi(z)$ as a deterministic functio of a random variable $\epsilon$ with some fixed distribution and the parameters $\phi$ of $q_\phi$ 
+\[
+z = t(\epsilon , \phi)
+\]
+The idea behind the Sticking The Landing paper is to apply the reparameterization trick to continous latent variables models in order to get a lower variance gradient estimates ( the reparameterization trick provids more informative gradients by exposing the dependence of sampled latent variables z on variational parameters $\phi$)\\
+Under such a parameterization of z, we can decompose the total derivative (TD) of the integrand of the ELBO w.r.t. the trainable parameters $\phi$ as
+\begin{align*}
+\widehat{\nabla}_{\text{TD}}(\epsilon, \phi) &= \nabla_\phi \left[\log p(\mathbf{x}|\mathbf{z}) + \log p(\mathbf{z}) - \log q_\phi(\mathbf{z}|\mathbf{x})\right] \\
+&= \nabla_\phi \left[\log p(\mathbf{z}|\mathbf{x}) + \log p(\mathbf{x}) - \log q_\phi(\mathbf{z}|\mathbf{x})\right]  \\
+&= \underbrace{\nabla_\mathbf{z} \left[\log p(\mathbf{z}|\mathbf{x}) - \log q_\phi(\mathbf{z}|\mathbf{x})\right] \nabla_\phi t(\epsilon, \phi)}_{\color{blue}\text{path derivative}} - \underbrace{\nabla_\phi \log q_\phi(\mathbf{z}|\mathbf{x})}_{\color{red}\text{score function}}
+\end{align*}
+The reparameterized gradien estimator wrt $\phi$ decomposes into to parts:
+\begin{itemize}
+    \item Path derivative $\rightarrow$ measures dependence on $\phi$ only through the sample z 
+    \item Score function $\rightarrow$ measures the dependence on $\log q_\phi$ directly, without considering how sample z changes as a function of $\phi$
+\end{itemize}
+Even the reparameterized gradient estimate contains the score function but it can be easily removed and that doing so gives even lower variance gradient estimates in many circumastances ( if $q_\phi(z|x) = p(z|x)$ the path derivative is equal to 0 for all z meanwhile the score function compoenent is not, meaning that the total derivative gradient estimator will have non zero variance even when $q$ matches the exact posterior everywhere )
 
+\subsubsection*{Question 3.1.22}
+We show that the expectaction of the score function is zero.
+\begin{align*}
+    E_{q(z|x)}\left[ \nabla_\phi \log q_\phi(z|x) \right] &= \int \nabla_\phi \log q_\phi(z|x) q_\phi(z|x) dz\\
+    &=  \int \frac{\nabla_\phi q_\phi(z|x)}{q_\phi(z|x)} q_\phi(z|x) dz\\
+    &=  \int \nabla_\phi q_\phi(z|x) dz\\
+    &=  \nabla_\phi \int  q_\phi(z|x) dz\\
+\end{align*}
+We just swapped the integral and the derivation, knowing that $q_\phi(\mathbf{z})$ is a probability distribution, its integral over all the probability space on which it is defined is equal to 1 independently from the variational parameters $\phi$.
+\[
+ E_{q(z|x)}\left[ \nabla_\phi \log q_\phi(z|x) \right] = \nabla_\phi 1 = 0
+\]
+
+\subsubsection*{Question 3.1.23}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.4\linewidth]{imgs/B2-Algorithm2OfStickingTheLandingPaper.jpeg}
+\end{figure}
+The authors propose to use stop-gradient function on the variational parameters $\phi$ when computing the score function, which prevents gradients from flowing through that part and effectively eliminates the score function term from the gradient computation.
+
+\subsubsection*{Question 3.1.24}
+The score function acts as a control variate: a zero-expectation term added to an estimator in order to reduce variance.
+
+\subsubsection*{Question 3.1.25}
 
 \end{document}
