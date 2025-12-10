@@ -558,6 +558,14 @@ We have proved that
 \subsection*{C.2}
 \subsubsection*{Question 2.1.12}
 Considering the model described below and the mean-field approximation, we derive the Rao-Blackwellized partial gradient of the ELBO w.r.t $\lambda_3$ 
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.4\linewidth]{imgs/C2-RaoBlackwellizedModel.png}
+    \caption{PGM of some generic model for Rao-Blackwellization}
+\end{figure}
+\[
+q(w_1, w_2, z, v, y) = q_{\lambda_1}(w_1)q_{\lambda_2}(w_2)q_{\lambda_3}(z)q_{\lambda_4}(v) \prod_{n} q_{\lambda_{5,n}}(y_n).
+\]
 \[
     \nabla_{\lambda_3} \elbo = E_{q_{(3)}} \left[ \nabla_{\lambda_3} \log q(z_3 | \lambda_3) \left( \log p_3(x,z_{(3)}) - \log q(z_3| \lambda_3) \right) \right]
 \]
@@ -576,6 +584,355 @@ Where:
 \[
 q_{(3)}(z_{(3)}) = q_{(3)}(z) = \prod_{z_j \in z_{(3)}} q(z_j | \lambda_j) =  q(z | \lambda_3) \cdot q(v | \lambda_4) \cdot \prod_{n} q(y_n | \lambda_{5,n})
 \]
+
+\subsection*{C.3}
+\subsubsection*{Question 2.2.13}
+We extend the implementation of problem 1.D.3 with the Control Variate used in the BBVI paper ( without Rao-blackwellization ).
+We provide also the same plots seen for 1.D.3.
+Preliminare informations:
+\begin{itemize}
+    \item D is the number of variational parameters $\lambda =\{ \mu_N , \lambda_N , \alpha_N , \beta_N\}$
+    \item Z is $\{\mu , \tau\}$
+    \item S is the number of Monte Carlo samples
 \end{itemize}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.32\linewidth]{imgs/C3-BBVIAlgorithm2.jpg}
+    \caption{BBVI II}
+\end{figure}
+We just ignore the pedix of p and q in the algorithm.
+The generation code is the same of the 1.D.3
+\begin{lstlisting}
+class BlackBoxVI:
+    """Black Box Variational Inference implementation."""
+    
+    def __init__(self, D, log_joint_distribution, variational_family_q,S=10, learning_rate=1e-3):
+        """
+        Black Box Variational Inference implementation without any .
+            Args:
+                D: dataset
+                log_joint_distribution: function that computes the log joint distribution
+                variational_family_q: variational family q with parameters to optimize
+                S: number of samples for Monte Carlo estimation
+                learning_rate: learning rate for the optimizer
+        """
+        self.D = D
+        self.log_joint_distribution = log_joint_distribution
+        self.variational_family_q = variational_family_q
+        self.S = S
+        self.learning_rate = learning_rate
+
+    
+    def fit(self, max_iterations = 1000):
+        """Fit the variational parameters using BBVI algorithm.
+        SGD optimization
+        Args:
+            threshold: convergence threshold
+            max_iterations: maximum number of iterations
+        """
+        history = {
+            "elbo" : [],
+            "final_params" : None,
+            'mu_expected': [],
+            'tau_expected': [],
+        }
+        lr_sgd = self.learning_rate      # A small learning rate
+        optimizer_sgd = optim.SGD([self.variational_family_q.parameters], lr=lr_sgd)
+       
+        for t in range(1,max_iterations+1):
+            elbo=0
+            loss=0
+            optimizer_sgd.zero_grad()
+            
+            number_of_variational_parameters = self.variational_family_q.get_number_of_parameters()
+
+            f = torch.zeros((number_of_variational_parameters, self.S))
+            h = torch.zeros((number_of_variational_parameters, self.S))
+
+            for s in range(self.S):
+                z_s = self.variational_family_q.sample()
+
+                #compute log(q(z[s]))
+                log_q_z_s = self.variational_family_q.log_prob(z_s)
+                
+                # Compute log p(x, z[s])
+                log_p_z_s_D = self.log_joint_distribution(self.D, z_s)
+                
+                # Compute the score function ∇_λ log q(z[s]; λ)
+                learning_signal = (log_p_z_s_D - log_q_z_s).detach()
+                
+                #loss
+                elbo += learning_signal
+
+                # We need to compute ∇_λ log q(z[s]; λ) for each parameter
+                grad_log_q_z_s = torch.autograd.grad(
+                        log_q_z_s, 
+                        self.variational_family_q.parameters, 
+                        retain_graph=True, 
+                        create_graph=False)[0]
+
+                 # For each variational parameter d
+                for d in range(number_of_variational_parameters):
+                    # Control variate computation
+                    grad_d = grad_log_q_z_s[d]
+                    
+                    # Compute f_t and h_t for this sample
+                    f[d, s] += learning_signal * grad_d
+                    h[d, s] += grad_d 
+                
+            elbo /= self.S
+                
+            
+            # Compute gradient with control variates for each parameter d
+            final_gradient = torch.zeros(number_of_variational_parameters)
+            
+            for d in range(number_of_variational_parameters):
+                # a_d* = Cov(f_d, h_d) / Var(h_d)
+                
+                f_d_mean = f[d].mean()
+                h_d_mean = h[d].mean()
+                
+                # Covariance
+                cov_f_h = ((f[d] - f_d_mean) * (h[d] - h_d_mean)).mean()
+                
+                # Variance of h_d
+                var_h = ((h[d] - h_d_mean) ** 2).mean()
+                
+                # We add small epsilon to avoid division by zero
+                if var_h > 1e-8:
+                    a_d_star = cov_f_h / var_h
+                else:
+                    a_d_star = 0.0
+                
+                # ∇_λd L ≈ (1/S) Σ[f_i[s] - a_d* h_i[s]]
+                final_gradient[d] = (f[d] - a_d_star * h[d]).mean()
+            
+            with torch.no_grad():
+                self.variational_family_q.parameters += self.learning_rate * final_gradient
+            
+            #we compute the elb and we check the params every 10 iterations and at the first iteration
+            if t % 10 == 0 or t == 1:
+                mu_N,lambda_N, alpha_N,beta_N = self.variational_family_q.get_actual_parameters()
+                history["elbo"].append((t,elbo))
+                history['mu_expected'].append((t,mu_N.item()))
+                history['tau_expected'].append((t,(alpha_N / beta_N).item()))
+            
+        history['final_params'] = self.variational_family_q.get_parameters()
+        
+        return history
+            
+\end{lstlisting}
+The rest of the code follows the same structure as before and is omitted for brevity ( the entire code can be found in the appendix )
+
+\textbf{Brief explanation of the changes}\\
+For each Monte Carlo sample $s$, the algorithm computes two critical matrices:
+
+\textbf{$f[d, s]$} represents the ``learning signal times gradient'' for parameter $d$ at sample $s$. Specifically:
+\begin{itemize}
+    \item First, compute the learning signal: $\log p(D, z[s]) - \log q(z[s]; \lambda)$, which measures how well sample $z[s]$ explains the data
+    \item Then compute $\nabla_{\lambda} \log q(z[s]; \lambda)$ using PyTorch's autograd, giving gradients for all parameters
+    \item For each parameter $d$: $f[d, s] = \text{learning\_signal} \times \text{grad}_d$
+\end{itemize}
+
+\textbf{$h[d, s]$} stores just the score function gradient for parameter $d$ at sample $s$:
+\begin{equation}
+h[d, s] = \nabla_{\lambda_d} \log q(z[s]; \lambda)
+\end{equation}
+
+These matrices have dimensions $[\text{number\_of\_parameters} \times S]$, storing all gradient information across samples.
+
+The control variates method exploits a key mathematical property: $\mathbb{E}[h[d,s]] = 0$ under the variational distribution $q$. This means $h$ can serve as a \textbf{zero-mean baseline} that, when properly scaled, reduces variance without introducing bias.
+
+\textbf{Conclusions}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\linewidth]{imgs/C3-ELBO.png}
+    \caption{Evidence Lower Bound (ELBO) over training iterations.}
+\end{figure}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\linewidth]{imgs/C3-MeanConvergence.png}
+    \caption{Convergence results for Tau parameter.}
+\end{figure}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\linewidth]{imgs/C3-TauConvergence.png}
+    \caption{Convergence results for the Tau parameter.}
+\end{figure}
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|l|c|c|}
+        \hline
+        \textbf{Parameter} & \textbf{Variational Estimate ($E_q[\cdot]$)} & \textbf{True/Data Value} \\
+        \hline
+        Mean ($\mu$) & 0.8939 & 1.0000 \\
+        \hline
+        Precision ($\tau$) & 0.5269 & 0.5000 \\
+        \hline
+        Dataset Mean & N/A & 0.8901 \\
+        \hline
+        Dataset Precision & N/A & 0.4580 \\
+        \hline
+    \end{tabular}
+    \caption{Data Statistics}
+\end{table}
+\end{itemize}
+\newpage
+The variance reduction results in more stable parameter updates, allowing the algorithm to take more confident steps toward the optimum. This is particularly evident in the steeper initial descent and the reduced noise in later iterations, confirming that control variates substantially improve the efficiency and reliability of the BBVI optimization process.
+\newpage
+\subsection*{C.4}
+We study the Gamma distribution and use it exponential-family structure to derive the Fish Information Matrix ( FIM ) and implement Natural Gradient Descent (NGD).\\
+We consider the Gamma distribution parameterized by shape $\alpha > 0$ and $\beta > 0$
+\[
+p(x \mid \alpha, \beta) = \frac{1}{\Gamma(\alpha) \beta^\alpha} x^{\alpha-1} \exp\left(-\frac{x}{\beta}\right), \quad x > 0.
+\]
+\subsubsection*{Question 2.2.14}
+We rewrite the Gamma Distribution in canonical exponential-family form identifying the natural parameters $\eta$ , sufficient statistics $t(x)$ and log-normalizer $A(\eta)$.\\
+We also derive gradient $\nabla_\eta A(\eta)$
+\[
+p(x | \eta) = h(x) e^{\eta^T t(x) - A(\eta)}
+\]
+We start by consideration the definition of Gamma Distribution pdf 
+\begin{align*}
+p(x| \alpha, \beta) &= \frac{1}{\Gamma(\alpha)} x^{\alpha-1} e^{\frac{-x}{\beta} -\alpha \log \beta}\\
+&= x^{\alpha-1} e^{\frac{-x}{\beta} -\alpha \log \beta - \log \Gamma(\alpha)}\\
+&= e^{-\frac{x}{\beta} +(\alpha-1) \log x  -(\alpha \log \beta + \log \Gamma(\alpha))}
+\end{align*}
+Where:
+\begin{itemize}
+    \item $t(x) = \binom{x}{\log x}$
+    \item $\eta = \binom{-\frac{1}{\beta}}{\alpha -1} = \binom{\eta_1}{\eta_2}$
+    \item $\beta = -\frac{1}{\eta_1}$
+    \item $\alpha=\eta_2+1$
+    \item $A(\eta)$
+\begin{align*}
+A(\eta) &= \alpha \log \beta + \log \Gamma(\alpha)\\
+&= -(\eta_2 + 1) \log (-\eta_1) + \log \Gamma(\eta_2+1)
+\end{align*}
+    \item $\nabla_\eta A(\eta)$
+\[
+\nabla_\eta A(\eta) = \begin{bmatrix}
+\nabla_{\eta_1} A(\eta) \\
+\nabla_{\eta_2} A(\eta)
+\end{bmatrix}
+= \begin{bmatrix}
+-\frac{(\eta_2 + 1)}{\eta_1} \\
+-\log(-\eta_1) + \frac{\Gamma'(\eta_2+1)}{\Gamma(\eta_2+1)}
+\end{bmatrix}
+= \begin{bmatrix}
++\beta \lambda \\
++\log(\beta ) + \Psi(a)
+\end{bmatrix} = \begin{bmatrix}
+E[x] \\
+E[\log x]
+\end{bmatrix}
+\]
+Note: Digamma Function
+\[
+\Psi(z) = \frac{d\Gamma(z)}{\Gamma(z)}
+\]
+
+\end{itemize}
+
+\subsubsection*{Question 2.2.15}
+We are considering MSE as the differentiable loss function $L(\alpha,\beta)$
+\[
+L(\alpha,\beta) = \frac{1}{N} \sum_{i=1}^{N} (x_i - \tilde{x_i}(\alpha,\beta))^2
+\]
+We use the properties of exponential-family distributions and the Fisher Information $G(\alpha,\beta)$ for expressing the natural gradient $\tilde{\nabla}_{(\alpha,\beta)} \elbo$ as a function of the standard gradient $\nabla_{(\alpha,\beta)} \elbo$ and the FIM\\
+The general formula is given from the Stochastic Variatonal Inference paper of Hoffman, Blei, Wang and Paisley:
+\[
+\tilde{\nabla}_{(\alpha,\beta)} \elbo = G(\alpha,\beta)^{-1} \nabla_{(\alpha,\beta)} \elbo
+\]
+In particular, for exponential-family distribution, we can espress the relation between the two types of gradients as:\\
+\[
+\tilde{\nabla}_{(\alpha,\beta)} \elbo = \left[\nabla_{(\alpha,\beta)}^2 A(\alpha,\beta) \right]^{-1} \nabla_{(\alpha,\beta)} \elbo
+\]
+
+\subsubsection*{Question 2.2.16}
+We compute the inverse Fisher Information Matrix $F(\alpha,\beta)^{-1}$ explicitly. We verify your expression numerically.
+
+\begin{align*}
+G(\alpha,\beta) &= \nabla_{\alpha,\beta}^2 A(\alpha,\beta) \\
+G(\eta) &= \nabla_{\eta}^2 A(\eta)\\
+&= \begin{pmatrix}
+\nabla_{\eta_1} \nabla_{\eta_1} A(\eta) & \nabla_{\eta_1} \nabla_{\eta_2} A(\eta) \\
+\nabla_{\eta_1} \nabla_{\eta_2} A(\eta) & \nabla_{\eta_2} \nabla_{\eta_2} A(\eta)
+\end{pmatrix}\\
+&= \begin{pmatrix}
+\frac{(\eta_2+1)}{\eta_1^2} & -\frac{1}{\eta_1} \\
+-\frac{- 1}{(-\eta_1)} & \psi'(\eta_2 + 1)
+\end{pmatrix} \\
+&= \begin{pmatrix}
+\frac{\eta_2 + 1}{\eta_1^2} & -\frac{1}{\eta_1} \\
+-\frac{1}{\eta_1} & \psi'(\eta_2 + 1)
+\end{pmatrix}
+\end{align*}
+
+Knowing that $\eta_1 = -\frac{1}{\beta}$ and $\eta_2 = \alpha -1$, we can express $G(\eta)$ as $G(\alpha,\beta)$:
+\begin{align*}
+G(\alpha,\beta) &= \begin{bmatrix}
+\beta^2 \alpha & \beta \\
+\beta & \psi'(\alpha)
+\end{bmatrix}
+\end{align*}
+Then, we use the inverse fomula for 2x2 matrices
+\begin{align*}
+E &= \begin{pmatrix} a & b \\ c & d \end{pmatrix} = \begin{bmatrix}
+\beta^2 \alpha & \beta \\
+\beta & \psi'(\alpha)
+\end{bmatrix}
+\end{align*}
+
+\begin{align*}
+E^{-1} &= \frac{1}{ad - bc} \begin{pmatrix} d & -b \\ -c & a \end{pmatrix}
+\end{align*}
+
+\begin{align*}
+&= \frac{1}{\beta^2(\alpha \psi'(\alpha) - 1)} \begin{bmatrix}
+\psi'(\alpha) & -\beta \\
+-\beta & \beta^2 \alpha
+\end{bmatrix} \\
+&= \frac{1}{\alpha \psi'(\alpha) - 1} \begin{bmatrix}
+\frac{\psi'(\alpha)}{\beta^2} & -\frac{1}{\beta} \\
+-\frac{1}{\beta} & \alpha
+\end{bmatrix}
+\end{align*}
+
+We choose $\alpha = 2$ and $\beta = 3$
+
+$\psi'(\alpha) = 0.6449$
+
+\begin{align*}
+G(2,3) &= \begin{pmatrix}
+18 & 3 \\
+3 & 0.64473
+\end{pmatrix}
+\end{align*}
+\begin{align*}
+G^{-1}(2,3) &= \frac{1}{0.2878} \begin{pmatrix}
+0.071653 & -\frac{1}{3} \\
+-\frac{1}{3} & 2
+\end{pmatrix}
+= \begin{pmatrix}
+0.24922 & -1.15022 \\
+-1.15022 & 6.90734
+\end{pmatrix}
+\end{align*}
+We verify numerically that : $GG^{-1} = I$
+\begin{align*}
+\begin{pmatrix}
+18 & 3 \\
+3 & 0.64473
+\end{pmatrix}
+\begin{pmatrix}
+0.24922 & -1.15022 \\
+-1.15022 & 6.90734
+\end{pmatrix}
+= \begin{pmatrix}
+1 & \approx 0 \\
+\approx 0 & 1
+\end{pmatrix}
+\end{align*} 
 
 \end{document}
