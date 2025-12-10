@@ -1200,7 +1200,10 @@ We plot and compare the convergence trajectories of GD and NGD for both paramete
     \includegraphics[width=0.9\linewidth]{imgs/C4-NGDvsGD.png}
 \end{figure}
 \\
-The natural gradient leads to faster and more stable convergence because it corrects the direction of the standard gradient by taking into account the curvature of the probability distribution's manifold (via the Fisher Information Matrix, G).
+\textbf{Introduction}:
+The natural gradient is the fastest decreasing direction of the error defined in the parameter space in the Riemannian space\\
+The Fisher information matrix (positive definite) defines the local curvature of the model distribution space\\
+\textbf{Answer}: The natural gradient leads to faster and more stable convergence because it corrects the direction of the standard gradient by taking into account the curvature of the probability distribution's manifold (via the Fisher Information Matrix, G).
 By multiplying the standard gradient with the inverse of the FIM , NGD scales down updates along shallow directions and amplifies updates along directions that cause a large change in the distribution (even if the standard gradient is small), effectively making the optimization landscape appear more like a sphere
 
 
